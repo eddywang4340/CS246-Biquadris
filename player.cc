@@ -1,7 +1,7 @@
 #include "player.h"
 
 Player::Player(int level, std::string file): 
-    studio{}, totalRowsCleared{0}, score{0}, highScore{0},
+    studio{}, totalRowsCleared{0}, highScore{0},
     lost{false}, isBlind{false}, isHeavy{false}, isForce{false}
 {
     // Initialize level based on parameter
@@ -19,12 +19,6 @@ Player::~Player() {
     delete lvl;
     delete shape;
     delete nextShape;
-}
-
-void Player::updateHighScore() {
-    if(score > highScore) {
-        highScore = score;
-    }
 }
 
 void Player::setNextLevel() {
@@ -48,7 +42,6 @@ void Player::setNextLevel() {
 
 void Player::resetBoard() {
     studio = Studio();
-    score = 0;
     totalRowsCleared = 0;
     lost = false;
     isBlind = false;
@@ -84,19 +77,6 @@ bool Player::handleMovement(int moveCol, int moveRow) {
     return false;
 }
 
-void Player::handleScoring() {
-    int initialRowsCleared = totalRowsCleared;
-    
-    dropBlock();
-    
-    int newRowsCleared = totalRowsCleared - initialRowsCleared;
-    
-    if(newRowsCleared > 0) {
-        score += (lvl->getLevel() + newRowsCleared) * (lvl->getLevel() + newRowsCleared);
-        updateHighScore();
-    }
-}
-
 void Player::updateTurn(string cmd) {
     if(shape == nullptr) {
         shape = nextShape;
@@ -118,13 +98,9 @@ void Player::updateTurn(string cmd) {
     if(cmd == "left") moveCol = -1;
     else if(cmd == "right") moveCol = 1;
     else if(cmd == "down") moveRow = 1;
-    else if(cmd == "drop") {
-        handleScoring();
-    }
+    else if(cmd == "drop") dropBlock();
 
-    if(handleMovement(moveCol, moveRow)) {
-        handleScoring();
-    }
+    if(handleMovement(moveCol, moveRow)) dropBlock();
 }
 
 void Player::dropBlock() {
@@ -145,26 +121,22 @@ void Player::dropBlock() {
         }
     }
     
-    if(top < 3) {
-        setLost();
-    }
+    if(top < 3) setLost();
     
     studio.setBoard(board);
     
     delete shape;
     shape = nullptr;
     
-    int rowsCleared = 0;
     while(studio.canRemove() != -1) {
         studio.removeRow();
-        rowsCleared++;
+        totalRowsCleared++;
     }
-    
-    if(rowsCleared > 0) {
-        updateRowsCleared(rowsCleared);
-        score += (lvl->getLevel() + rowsCleared) * (lvl->getLevel() + rowsCleared);
-        updateHighScore();
-    }
+}
+
+int Player::getHighScore() {
+    highScore = max(highScore, getScore());
+    return highScore; 
 }
 
 bool Player::canMove(int r, int c) {
@@ -185,47 +157,6 @@ bool Player::canMove(int r, int c) {
     }
     
     return true;
-}
-
-void Player::dropBlock() {
-    while(canMove(1, 0)) {
-        shape->move(0, 1);
-    }
-    
-    std::vector<std::vector<char>> board = studio.getBoard();
-    int top = shape->getOT();
-    int left = shape->getOL();
-    
-
-    for(int i = 0; i < shape->getHeight(); ++i) {
-        for(int j = 0; j < shape->getWidth(); ++j) {
-            char shapeChar = shape->charAt(j, i);
-            if(shapeChar != ' ') {
-                board[top + i][left + j] = shapeChar;
-            }
-        }
-    }
-    
-    if (top < 3) {
-        setLost();
-    }
-    
-    studio.setBoard(board);
-    
-    delete shape;
-    shape = nullptr;
-    
-    int rowsCleared = 0;
-    while (studio.canRemove() != -1) {
-        studio.removeRow();
-        rowsCleared++;
-    }
-    
-    if (rowsCleared > 0) {
-        updateRowsCleared(rowsCleared);
-        score += (lvl->getLevel() + rowsCleared) * (lvl->getLevel() + rowsCleared);
-        updateHighScore();
-    }
 }
 
 void Player::renderRow(int n) {
