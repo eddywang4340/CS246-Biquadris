@@ -15,12 +15,10 @@ class Player {
     Shape* nextShape;
     
     int totalRowsCleared;
-    int score;
     int highScore;
     bool lost, isBlind, isHeavy, isForce;
 
     bool handleMovement(int col, int row);
-    void handleScoring();  
 
 public:
     Player(int lvl = 0, std::string file = "test.in");
@@ -34,10 +32,9 @@ public:
 
     int getRowsCleared() const { return totalRowsCleared; }
     void updateRowsCleared(int rows) { totalRowsCleared += rows; }
-    int getScore() const { return score; }
+    int getScore() const { return (lvl->getLevel() + totalRowsCleared)*(lvl->getLevel() + totalRowsCleared); }
     int getLevel() const { return lvl->getLevel(); }
-    int getHighScore() const { return highScore; }
-    void updateHighScore();
+    int getHighScore();
     bool getLost() const { return lost; }
     void setLost() { lost = true; }
 
