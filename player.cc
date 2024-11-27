@@ -4,7 +4,7 @@ Player::Player(int level, std::string file):
     studio{}, totalRowsCleared{0}, score{0}, highScore{0},
     lost{false}, isBlind{false}, isHeavy{false}, isForce{false}
 {
-    if(level == 0) lvl = new LevelZero(file);  // Fixed: Added LevelZero
+    if(level == 0) lvl = new LevelOne();  // Fix: Add LevelZero
     else if(level == 1) lvl = new LevelOne();
     else if(level == 2) lvl = new LevelTwo();
     else if(level == 3) lvl = new LevelThree(file);
@@ -60,7 +60,13 @@ void Player::resetBoard() {
     nextShape = lvl->getRand();
 }
 
-void Player::renderRow(int n) {
+void Player::updateTurn(std::string cmd)
+{
+    
+}
+
+void Player::renderRow(int n)
+{
     if(isBlind && n >= 2 && n <= 11) {
         for(int i = 0; i < 11; ++i) {
             if(i >= 2 && i <= 8) {

@@ -11,7 +11,7 @@ class Studio {
 
     // public members
     public:
-        Studio(std::vector<std::vector<char>> b) : board{b} {}
+        Studio();
         int canRemove();
         char charAt(int x, int y);
         void removeRow();

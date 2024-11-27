@@ -14,8 +14,8 @@ class Level {
 	public:
 		Level(int level): t{0}, level{level} {};
 		~Level();
-		virtual Shape getRand() = 0;
-		Shape getBlock(char block);
+		virtual Shape* getRand() = 0;
+		Shape* getBlock(char block);
 		int getLevel();
 		int getTime();
 		void setTime(const int& newTime);
@@ -25,13 +25,13 @@ class Level {
 class LevelOne: public Level {
 	public:
 		LevelOne();
-		Shape getRand();
+		Shape* getRand();
 };
 
 class LevelTwo: public Level {
 	public:
 		LevelTwo();
-		Shape getRand();
+		Shape* getRand();
 };
 
 class LevelThree: public Level {
@@ -39,8 +39,8 @@ class LevelThree: public Level {
 
 	public:
 		LevelThree(string file);
-		Shape getRand();
-		Shape getNotRand();
+		Shape* getRand();
+		Shape* getNotRand();
 };
 
 class LevelFour: public Level {
@@ -48,8 +48,8 @@ class LevelFour: public Level {
 	
 	public:
 		LevelFour(string file);
-		Shape getRand();
-		Shape getNotRand();
+		Shape* getRand();
+		Shape* getNotRand();
 		int dropRandBlock();
 };
 

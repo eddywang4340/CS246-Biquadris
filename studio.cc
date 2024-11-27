@@ -6,7 +6,7 @@
 Studio::Studio() {
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         // populate a blank row
-        std::vector<c> row;
+        std::vector<char> row;
         for (int j = 0; j < GAME_NUM_COL; ++j) {
             row.emplace_back(' ');
         }
@@ -19,7 +19,7 @@ int Studio::canRemove() {
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         canRemove = true;
         for (int j = 0; j < GAME_NUM_COL; ++j) {
-            if board[i][j] == ' ' {
+            if(board[i][j] == ' ') {
                 canRemove = false;
                 break;
             }
@@ -36,10 +36,13 @@ char Studio::charAt(int x, int y) {
 }
 
 void Studio::removeRow() {
-    row_remove = canRemove();
+    int row_remove = canRemove();
     if (row_remove != -1) {
-        for (int i = 0; i < GAME_NUM_COL; ++i) {
-            board[row_remove][i] = ' ';
-        }
+        board.erase(board.begin() + row_remove);
+
+        std::vector<char> empty; 
+        for(int i = 0; i < GAME_NUM_COL; i++) empty.emplace_back(' ');
+
+        
     }
 }

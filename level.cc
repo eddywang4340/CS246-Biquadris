@@ -20,45 +20,45 @@ void Level::incrementTime() { t++; }
 
 int Level::getLevel() { return level; }
 
-Shape Level::getBlock(char block) {
+Shape* Level::getBlock(char block) {
 	switch(block) {
 		case('S'): {
-			SShape shape = SShape();
+			Shape* shape = new SShape();
 			return shape;
 		}
 		
 		case('Z'): {
-			ZShape shape = ZShape();
+			Shape* shape = new ZShape();
 			return shape;
 		}
 		
 		case('L'): {
-			LShape shape = LShape();
+			Shape* shape = new LShape();
 			return shape;
 		}
 
 		case('I'): {
-			IShape shape = IShape();
+			Shape* shape = new IShape();
 			return shape;
 		}
 
 		case('J'): {
-			JShape shape = JShape();
+			Shape* shape = new JShape();
 			return shape;
 		}
 
 		case('O'): {
-			OShape shape = OShape();
+			Shape* shape = new OShape();
 			return shape;
 		}
 
 		case('T'): {
-			TShape shape = TShape();
+			Shape* shape = new TShape();
 			return shape;
 		}
 
 		default: {
-			SShape shape = SShape();
+			SShape* shape = new SShape();
 			return shape;
 		}
 	}
@@ -68,7 +68,7 @@ LevelOne::LevelOne(): Level(1) {
 	probability.insert(probability.end(), {'S', 'Z', 'L', 'L', 'I', 'I', 'J', 'J', 'O', 'O', 'T', 'T'});
 }
 
-Shape LevelOne::getRand() {
+Shape* LevelOne::getRand() {
 	int idx = rand() % 12;
 	char block = probability[idx];
 	return getBlock(block);
@@ -78,7 +78,7 @@ LevelTwo::LevelTwo(): Level(2) {
 	probability.insert(probability.end(), {'S', 'Z', 'L', 'I', 'J', 'O','T'});
 }
 
-Shape LevelTwo::getRand() {
+Shape* LevelTwo::getRand() {
 	int idx = rand() % 7;
 	char block = probability[idx];
 	return getBlock(block);
@@ -88,13 +88,13 @@ LevelThree::LevelThree(string file): Level(3), cmds(file) {
 	probability.insert(probability.end(), {'S', 'S', 'Z', 'Z', 'I', 'J', 'O', 'L', 'T'});
 }
 
-Shape LevelThree::getRand() {
+Shape* LevelThree::getRand() {
 	int idx = rand() % 9;
 	char block = probability[idx];
 	return getBlock(block);
 } 
 
-Shape LevelThree::getNotRand() {
+Shape* LevelThree::getNotRand() {
 	cout << "No get random :)" << endl;
 }
 
@@ -102,7 +102,7 @@ LevelFour::LevelFour(string file): Level(4), cmds(file) {
 	probability.insert(probability.end(), {'S', 'S', 'Z', 'Z', 'I', 'J', 'O', 'L', 'T'});
 }
 
-Shape LevelFour::getRand() {
+Shape* LevelFour::getRand() {
 	int idx = rand() % 9;
 	char block = probability[idx];
 	return getBlock(block);
@@ -120,6 +120,6 @@ int LevelFour::dropRandBlock() {
 	return -1;
 }
 
-Shape LevelFour::getNotRand() {
+Shape* LevelFour::getNotRand() {
 	cout << "No get random :)" << endl;
 }
