@@ -228,12 +228,7 @@ void Player::dropBlock() {
     }
 }
 
-void Player::updateTurn(std::string cmd) {
-
-}
-
-void Player::renderRow(int n)
-{
+void Player::renderRow(int n) {
     if(isBlind && n >= 2 && n <= 11) {
         for(int i = 0; i < 11; ++i) {
             if(i >= 2 && i <= 8) {
