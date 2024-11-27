@@ -132,8 +132,8 @@ void Player::dropBlock() {
     }
 
     vector<vector<char>> board = studio.getBoard();
-    int top = shape->getIT();
-    int left = shape->getIL();
+    int top = shape->getT();
+    int left = shape->getL();
 
     for(int i = 0; i < shape->getHeight(); ++i) {
         for(int j = 0; j < shape->getWidth(); ++j) {
@@ -164,8 +164,8 @@ int Player::getHighScore() {
 }
 
 bool Player::canMove(int r, int c) {
-    int nt = shape->getIT() + r;
-    int nl = shape->getIL() + c;
+    int nt = shape->getT() + r;
+    int nl = shape->getL() + c;
     
     if(nl < 0 || nl + shape->getWidth() > 11 ||
         nt < 0 || nt + shape->getHeight() > 18) {
@@ -197,8 +197,8 @@ void Player::renderRow(int n) {
     }
 
     for(int i = 0; i < 11; ++i) {
-        if(shape && n >= shape->getIT() && n < shape->getIT() + shape->getHeight() && i >= shape->getIL() && i < shape->getIL() + shape->getWidth()) {
-            char shapeChar = shape->charAt(i - shape->getIL(), n - shape->getIT());
+        if(shape && n >= shape->getT() && n < shape->getT() + shape->getHeight() && i >= shape->getL() && i < shape->getL() + shape->getWidth()) {
+            char shapeChar = shape->charAt(i - shape->getL(), n - shape->getT());
             if(shapeChar != ' ') {
                 std::cout << shapeChar;
                 continue;

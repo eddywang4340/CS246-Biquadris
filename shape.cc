@@ -120,12 +120,6 @@ void Shape::rotateCCW() { // tested
 
 vector<vector<char>> Shape::getGrid() { return grid;} //tested
 
-int Shape::getIT() {
-    return i_top;
-}
-int Shape::getIL() {
-    return i_left;
-}
 int Shape::getWidth() {
     return i_width;
 }

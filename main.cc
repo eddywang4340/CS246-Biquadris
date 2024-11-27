@@ -14,11 +14,10 @@ int main() {
 
 	cout << "-----" << endl;
 	
-	for (int i = 0; i < 5; ++i) {
+	for (int j = 0; j < 5; ++j) {
 		p1.dropBlock();
 
 		for (int i = 0; i < 18; ++i) {
-			cout << "row" <<endl;
 			p1.renderRow(i);
 			cout << endl;
 		}
