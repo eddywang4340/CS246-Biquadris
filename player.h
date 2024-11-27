@@ -16,9 +16,10 @@ class Player {
     
     int totalRowsCleared;
     int highScore;
-    bool lost, isBlind, isHeavy, isForce;
+    bool lost, isBlind, isHeavy, isForce, isRand;
 
     bool handleMovement(int col, int row);
+    void setNextShape();
 
 public:
     Player(int lvl = 0, std::string file = "test.in");

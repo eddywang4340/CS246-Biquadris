@@ -1,8 +1,10 @@
 #ifndef LEVEL_H
 #define LEVEL_H
+
 #include <vector>
 #include <fstream>
 #include "shape.h"
+
 using namespace std;
 
 class Level {
@@ -15,6 +17,7 @@ class Level {
 		Level(int level): t{0}, level{level} {};
 		~Level();
 		virtual Shape* getRand() = 0;
+        Shape* getNotRand();
 		Shape* getBlock(char block);
 		int getLevel();
 		int getTime();

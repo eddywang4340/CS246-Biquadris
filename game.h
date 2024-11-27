@@ -3,18 +3,17 @@
 
 // import classes
 #include "player.h"
-#include "gameproperties.h"
+// #include "gameproperties.h"
 
 class Game {
     // private members
-    Player &Player1;
-    Player &Player2;
-    GameProperties &GP;
+    Player player1, player2;
+    // GameProperties &GP;
     int turnAcc;
 
     // public members
     public:
-        Game(Player &p1, Player &p2, GameProperties &g, int turn) : Player1{p1}, Player2{p2}, GP{g}, turnAcc{turn} {}
+        Game(int player1_lvl, int player2_lvl, std::string player1_file = "", std::string player2_file = "");
         std::string getWinner();
         void update();
         void render();
