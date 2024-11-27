@@ -14,6 +14,11 @@ int main() {
 	string cmd;
 
 	cout << "----" << endl;
+
+	for (int i = 0; i < 18; ++i) {
+			p1.renderRow(i);
+			cout << endl;
+		}
 	
 	while (cin >> cmd) {
 		p1.updateTurn(cmd);

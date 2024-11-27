@@ -115,6 +115,12 @@ void Player::updateTurn(string cmd) {
         return;
     }
 
+	if (cmd == "clockwise") {
+		shape->rotateCW();
+	} else if (cmd == "counterclockwise") {
+		shape->rotateCCW();
+	}
+
     //Movement commands
     int moveRow = 0, moveCol = 0;
     
@@ -126,7 +132,7 @@ void Player::updateTurn(string cmd) {
     if(handleMovement(moveCol, moveRow)) dropBlock();
 }
 
-void Player::dropBlock() {
+void Player::dropBlock() { // tested
     while(canMove(1, 0)) {
         shape->move(0, 1);
     }
@@ -183,7 +189,7 @@ bool Player::canMove(int r, int c) {
     return true;
 }
 
-void Player::renderRow(int n) {
+void Player::renderRow(int n) { // tested
     if(isBlind && n >= 2 && n <= 11) {
         for(int i = 0; i < 11; ++i) {
             if(i >= 2 && i <= 8) {
@@ -208,7 +214,7 @@ void Player::renderRow(int n) {
     }
 }
 
-void Player::renderRowShape(int n) const {
+void Player::renderRowShape(int n) const { // tested
     if(nextShape) {
         std::vector<std::vector<char>> grid = nextShape->getGrid();
         for(int i = 0; i < 4; ++i) {
