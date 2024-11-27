@@ -111,7 +111,7 @@ void Player::updateTurn(string cmd) {
         setNextLevel();
         return;
     } else if(cmd == "leveldown") {
-        //setDownLevel();
+        setDownLevel();
         return;
     }
 
