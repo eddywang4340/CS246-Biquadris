@@ -1,18 +1,21 @@
 #include "player.h"
+#include "shape.h"
+
+using namespace std;
 
 Player::Player(int level, std::string file): 
     studio{}, totalRowsCleared{0}, highScore{0},
     lost{false}, isBlind{false}, isHeavy{false}, isForce{false}
 {
     // Initialize level based on parameter
-    if(level == 0) lvl = new LevelOne(); /// no level 0
-    else if(level == 1) lvl = new LevelOne();
-    else if(level == 2) lvl = new LevelTwo();
-    else if(level == 3) lvl = new LevelThree(file);
-    else lvl = new LevelFour(file);
+    if(level == 0) { lvl = new LevelOne(); } /// no level 0
+    else if(level == 1) { lvl = new LevelOne(); }
+    else if(level == 2) { lvl = new LevelTwo(); }
+    else if(level == 3) { lvl = new LevelThree(file); }
+    else { lvl = new LevelFour(file); }
 
     nextShape = lvl->getRand();
-    shape = nullptr;
+    shape = lvl->getRand();
 }
 
 Player::~Player() {
@@ -21,8 +24,9 @@ Player::~Player() {
     delete nextShape;
 }
 
-void Player::setNextLevel() {
+void Player::setNextLevel() { //tested
     int currentLevel = lvl->getLevel();
+	cout << "Current Level: " << currentLevel << endl;
     Level* newLevel = nullptr;
     
     if(currentLevel < 4) {
@@ -31,6 +35,25 @@ void Player::setNextLevel() {
             case 2: newLevel = new LevelTwo(); break;
             case 3: newLevel = new LevelThree(""); break;
             case 4: newLevel = new LevelFour(""); break;
+        }
+        
+        if(newLevel) {
+            delete lvl;
+            lvl = newLevel;
+        }
+    }
+}
+
+void Player::setDownLevel() { //tested
+    int currentLevel = lvl->getLevel();
+    Level* newLevel = nullptr;
+    
+    if(currentLevel > 0) {
+        switch(currentLevel - 1) {
+			case 0: newLevel = new LevelOne(); break;
+            case 1: newLevel = new LevelOne(); break;
+            case 2: newLevel = new LevelTwo(); break;
+            case 3: newLevel = new LevelThree(""); break;
         }
         
         if(newLevel) {
@@ -109,8 +132,8 @@ void Player::dropBlock() {
     }
 
     vector<vector<char>> board = studio.getBoard();
-    int top = shape->getOT();
-    int left = shape->getOL();
+    int top = shape->getIT();
+    int left = shape->getIL();
 
     for(int i = 0; i < shape->getHeight(); ++i) {
         for(int j = 0; j < shape->getWidth(); ++j) {
@@ -126,7 +149,8 @@ void Player::dropBlock() {
     studio.setBoard(board);
     
     delete shape;
-    shape = nullptr;
+    shape = nextShape;
+	nextShape = lvl->getRand();
     
     while(studio.canRemove() != -1) {
         studio.removeRow();
@@ -140,8 +164,8 @@ int Player::getHighScore() {
 }
 
 bool Player::canMove(int r, int c) {
-    int nt = shape->getOT() + r;
-    int nl = shape->getOL() + c;
+    int nt = shape->getIT() + r;
+    int nl = shape->getIL() + c;
     
     if(nl < 0 || nl + shape->getWidth() > 11 ||
         nt < 0 || nt + shape->getHeight() > 18) {
@@ -173,8 +197,8 @@ void Player::renderRow(int n) {
     }
 
     for(int i = 0; i < 11; ++i) {
-        if(shape && n >= shape->getOT() && n < shape->getOT() + shape->getHeight() && i >= shape->getOL() && i < shape->getOL() + shape->getWidth()) {
-            char shapeChar = shape->charAt(i - shape->getOL(), n - shape->getOT());
+        if(shape && n >= shape->getIT() && n < shape->getIT() + shape->getHeight() && i >= shape->getIL() && i < shape->getIL() + shape->getWidth()) {
+            char shapeChar = shape->charAt(i - shape->getIL(), n - shape->getIT());
             if(shapeChar != ' ') {
                 std::cout << shapeChar;
                 continue;

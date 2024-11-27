@@ -43,6 +43,7 @@ public:
     void setForce() { isForce = true; }
     
     void setNextLevel();
+	void setDownLevel();
     void resetBoard();
 };
 

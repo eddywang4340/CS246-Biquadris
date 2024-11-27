@@ -21,8 +21,8 @@ class Shape {
 		char charAt(int x, int y);
 		vector<vector<char>> getGrid(); // for testing, can remove
 
-        int getOT();
-        int getOL();
+        int getIT();
+        int getIL();
         int getWidth();
         int getHeight();
 };
