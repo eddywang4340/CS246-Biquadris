@@ -120,17 +120,11 @@ void Shape::rotateCCW() { // tested
 
 vector<vector<char>> Shape::getGrid() { return grid;} //tested
 
-int Shape::getOT() {
-    return o_top;
-}
-int Shape::getOL() {
-    return o_left;
-}
 int Shape::getWidth() {
-    return o_width;
+    return i_width;
 }
 int Shape::getHeight() {
-    return o_height;
+    return i_height;
 }
 
 LShape::LShape(): Shape{3, 2, 'L'}  { //tested

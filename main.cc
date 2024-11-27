@@ -1,4 +1,7 @@
-#include <iostream>
+#include "level.h"
+#include "shape.h"
+#include "player.h"
+#include "iostream"
 #include <cstdlib>
 #include <vector>
 #include <ctime>
@@ -9,18 +12,19 @@ using namespace std;
 
 int main() {
 	srand(time(0)); // KEEP THIS
-
-    Game game(0, 0, "", "");
-
-	LevelOne l1 = LevelOne();
-	Shape* s = l1.getRand();
-
-	for (size_t i = 0; i < 4; ++i) {
-		for (size_t j = 0; j < 4; ++j) {
-			cout << s->charAt(i, j) << ' ';
-		}
-		cout << endl;
-	}
+	Player p1 = Player();
+	string cmd;
 
 	cout << "----" << endl;
+	
+	while (cin >> cmd) {
+		p1.updateTurn(cmd);
+
+		for (int i = 0; i < 18; ++i) {
+			p1.renderRow(i);
+			cout << endl;
+		}
+
+		cout << "----" << endl;
+	}
 } 
