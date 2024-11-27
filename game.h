@@ -3,11 +3,7 @@
 
 // import classes
 #include "player.h"
-#include "gameproperties.h" 
-
-extern const int GAME_NUM_ROW;
-extern const int GAME_NUM_COL;
-extern const int SHAPE_GRID_NUM_ROW;
+#include "gameproperties.h"
 
 class Game {
     // private members

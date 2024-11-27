@@ -1,21 +1,20 @@
 #ifndef STUDIO_H
 #define STUDIO_H
 
+// #include "xwindow.h"
 #include <vector>
-#include "xwindow.h"
 
 class Studio {
     // private members
     vector<vector<char>> board;
-    Xwindow *window;
+    // Xwindow *window;
 
     // public members
     public:
-        Studio(vector<vector<char>> b) : board{b} {}
+        Studio();
         int canRemove();
         char charAt(int x, int y);
         void removeRow();
-        void gravity();
 };
 
 #endif

@@ -1,13 +1,24 @@
 #include "game.h"
+#include "constants.h"
 #include <iostream>
 #include <iomanip>
 
-const int GAME_NUM_ROW = 18;
-const int GAME_NUM_COL = 11;
-const int SHAPE_GRID_NUM_ROW = 4;
-
 std::string Game::getWinner() {
-
+    // Checks to see which player lost
+    if (Player1.getLost() == Player2.getLost()) {
+        // Both players have not lost (not possible for both players to lose) so we compare high scores
+        if (Player1.getHighScore() > Player2.getHighScore()) {
+            return "Player 1";
+        } else if (Player2.getHighScore() > Player1.getHighScore()) {
+            return "Player 2";
+        } else {
+            return "Tie";
+        }
+    } else if (Player1.getLost()) {
+        return "Player 2";
+    } else {
+        return "Player 1";
+    }
 }
 
 void Game::update() {
@@ -81,5 +92,14 @@ void Game::render() {
 }
 
 void Game::restart() {
+    // Update both Players' totalRowsCleared
+    Player1.updateRowsCleared(0);
+    Player2.updateRowsCleared(0);
 
+    // Set turnAcc to 0
+    turnAcc = 0;
+
+    // Reset Player's game boards
+    Player1.resetBoard();
+    Player2.resetBoard();
 }
