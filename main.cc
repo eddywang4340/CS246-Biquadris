@@ -11,17 +11,18 @@ using namespace std;
 int main() {
 	srand(time(0)); // KEEP THIS
 	Player p1 = Player();
+	string cmd;
 
-	cout << "-----" << endl;
+	cout << "----" << endl;
 	
-	for (int j = 0; j < 5; ++j) {
-		p1.dropBlock();
+	while (cin >> cmd) {
+		p1.updateTurn(cmd);
 
 		for (int i = 0; i < 18; ++i) {
 			p1.renderRow(i);
 			cout << endl;
 		}
-	}
 
-	cout << "-----" << endl;
+		cout << "----" << endl;
+	}
 } 
