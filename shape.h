@@ -20,6 +20,11 @@ class Shape {
 		void rotateCCW();
 		char charAt(int x, int y);
 		vector<vector<char>> getGrid(); // for testing, can remove
+
+        int getOT();
+        int getOL();
+        int getWidth();
+        int getHeight();
 };
 
 class LShape: public Shape {

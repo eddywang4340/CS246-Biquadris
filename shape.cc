@@ -120,6 +120,19 @@ void Shape::rotateCCW() { // tested
 
 vector<vector<char>> Shape::getGrid() { return grid;} //tested
 
+int Shape::getOT() {
+    return o_top;
+}
+int Shape::getOL() {
+    return o_left;
+}
+int Shape::getWidth() {
+    return o_width;
+}
+int Shape::getHeight() {
+    return o_height;
+}
+
 LShape::LShape(): Shape{3, 2, 'L'}  { //tested
 	vector<char> r1, r2;
 	r1.insert(r1.end(), {' ', ' ', c});
