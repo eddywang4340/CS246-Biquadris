@@ -40,9 +40,8 @@ void Studio::removeRow() {
     if (row_remove != -1) {
         board.erase(board.begin() + row_remove);
 
-        std::vector<char> empty; 
+        std::vector<char> empty;
         for(int i = 0; i < GAME_NUM_COL; i++) empty.emplace_back(' ');
-
-        
+        board.insert(board.begin(), empty);
     }
 }
