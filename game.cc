@@ -3,21 +3,27 @@
 #include <iostream>
 #include <iomanip>
 
+Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file):
+    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}
+{ }
+
 std::string Game::getWinner() {
     // Checks to see which player lost
-    if (Player1.getLost() == Player2.getLost()) {
+    if (player1.getLost() == player2.getLost()) {
         // Both players have not lost (not possible for both players to lose) so we compare high scores
-        if (Player1.getHighScore() > Player2.getHighScore()) {
-            return "Player 1";
-        } else if (Player2.getHighScore() > Player1.getHighScore()) {
-            return "Player 2";
-        } else {
+        if (player1.getHighScore() > player2.getHighScore()) {
+            return "player 1";
+        } 
+        else if (player2.getHighScore() > player1.getHighScore()) {
+            return "player 2";
+        } 
+        else {
             return "Tie";
         }
-    } else if (Player1.getLost()) {
-        return "Player 2";
+    } else if (player1.getLost()) {
+        return "player 2";
     } else {
-        return "Player 1";
+        return "player 1";
     }
 }
 
@@ -38,68 +44,67 @@ void Game::update() {
 
         // Checking which player's turn it is
         if (turnAcc % 2 == 0) {
-            // Player 1's turn
+            // player 1's turn
 
             // Signals end of turn
             if (command == "drop") {
                 turnAcc++;
             }
-            Player1.updateTurn(command);
+            player1.updateTurn(command);
         } else {
-            // Player 2's turn
+            // player 2's turn
 
              // Signals end of turn
             if (command == "drop") {
                 turnAcc++;
             }
-            Player2.updateTurn(command);
+            player2.updateTurn(command);
         }
     }
 }
 
 void Game::render() {
     // each player's level
-    std::cout << "Level:" << setw(5) << setfill(' ') << right << Player1.getLevel() << "     ";
-    std::cout << "Level:" << setw(5) << setfill(' ') << right << Player2.getLevel() << std::endl;
+    std::cout << "Level:" << setw(5) << setfill(' ') << right << player1.getLevel() << "     ";
+    std::cout << "Level:" << setw(5) << setfill(' ') << right << player2.getLevel() << std::endl;
 
     // each player's score
-    std::cout << "Score:" << setw(5) << setfill(' ') << right << Player1.getScore() << "     ";
-    std::cout << "Score:" << setw(5) << setfill(' ') << right << Player2.getScore() << std::endl;
+    std::cout << "Score:" << setw(5) << setfill(' ') << right << player1.getScore() << "     ";
+    std::cout << "Score:" << setw(5) << setfill(' ') << right << player2.getScore() << std::endl;
 
     // separator
     std::cout << "-----------     -----------" << std::endl;
 
     // render row by row
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
-        Player1.renderRow(i);
+        player1.renderRow(i);
         std::cout << "     ";
-        Player2.renderRow(i);
-        std::cout << std:endl;
+        player2.renderRow(i);
+        std::cout << std::endl;
     }
 
     // separator
     std::cout << "-----------     -----------" << std::endl;
 
     // render next shape
-    std::cout "Next:           Next:      " << std::endl;
+    std::cout << "Next:           Next:      " << std::endl;
     for (int i = 0; i < SHAPE_GRID_NUM_ROW; ++i) {
-        Player1.renderRowShape(i);
+        player1.renderRowShape(i);
         std::cout << "            ";
-        Player2.renderRowShape(i);
+        player2.renderRowShape(i);
         std::cout << std::endl;
     }
-
 }
 
 void Game::restart() {
-    // Update both Players' totalRowsCleared
-    Player1.updateRowsCleared(0);
-    Player2.updateRowsCleared(0);
+    // Update both players' totalRowsCleared
+    player1.updateRowsCleared(0);
+    player2.updateRowsCleared(0);
 
     // Set turnAcc to 0
     turnAcc = 0;
 
-    // Reset Player's game boards
-    Player1.resetBoard();
-    Player2.resetBoard();
+    // Reset player's game boards
+    player1.resetBoard();
+    player2.resetBoard();
 }

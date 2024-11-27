@@ -3,9 +3,9 @@
 
 using namespace std;
 
-Player::Player(int level, std::string file): 
+Player::Player(int level, std::string file):
     studio{}, totalRowsCleared{0}, highScore{0},
-    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}
+    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{file == ""}
 {
     // Initialize level based on parameter
     if(level == 0) { lvl = new LevelOne(); } /// no level 0
@@ -14,8 +14,8 @@ Player::Player(int level, std::string file):
     else if(level == 3) { lvl = new LevelThree(file); }
     else { lvl = new LevelFour(file); }
 
-    nextShape = lvl->getRand();
-    shape = lvl->getRand();
+    setNextShape();
+    shape = nullptr;
 }
 
 Player::~Player() {
@@ -74,7 +74,7 @@ void Player::resetBoard() {
     delete shape;
     delete nextShape;
     shape = nullptr;
-    nextShape = lvl->getRand();
+    setNextShape();
 }
 
 bool Player::handleMovement(int moveCol, int moveRow) {
@@ -100,11 +100,13 @@ bool Player::handleMovement(int moveCol, int moveRow) {
     return false;
 }
 
+void Player::setNextShape() {
+    if(isRand) nextShape = lvl->getRand();
+    else nextShape = lvl->getNotRand();
+}
+
 void Player::updateTurn(string cmd) {
-    if(shape == nullptr) {
-        shape = nextShape;
-        nextShape = lvl->getRand();
-    }
+    if(shape == nullptr) setNextShape();
 
     //Level commands
     if(cmd == "levelup") {
