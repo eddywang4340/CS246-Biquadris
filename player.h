@@ -25,8 +25,8 @@ public:
     ~Player();
 
     void updateTurn(std::string cmd);
-    void renderRow(int n);
-    void renderRowShape(int n) const;
+    std::string renderRow(int n);
+    std::string renderRowShape(int n) const;
     bool canMove(int r, int c);
     void dropBlock();
 

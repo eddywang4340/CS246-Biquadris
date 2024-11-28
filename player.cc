@@ -193,39 +193,48 @@ bool Player::canMove(int r, int c) { // tested
     return true;
 }
 
-void Player::renderRow(int n) { // tested
+std::string Player::renderRow(int n) { // tested
+    std::string row_str = "";
     if(isBlind && n >= 2 && n <= 11) {
         for(int i = 0; i < 11; ++i) {
             if(i >= 2 && i <= 8) {
-                std::cout << "?";
+                row_str += "?";
+                // std::cout << "?";
             } 
             else {
-                std::cout << studio.charAt(i, n);
+                row_str += studio.charAt(i, n);
+                // std::cout << studio.charAt(i, n);
             }
         }
-        return;
+        return row_str;
     }
 
     for(int i = 0; i < 11; ++i) {
         if(shape && n >= shape->getT() && n < shape->getT() + shape->getHeight() && i >= shape->getL() && i < shape->getL() + shape->getWidth()) {
             char shapeChar = shape->charAt(i - shape->getL(), n - shape->getT());
             if(shapeChar != ' ') {
-                std::cout << shapeChar;
+                row_str += shapeChar;
+                // std::cout << shapeChar;
                 continue;
             }
         }
-        std::cout << studio.charAt(i, n);
+        row_str += studio.charAt(i, n);
+        // std::cout << studio.charAt(i, n);
     }
+    return row_str;
 }
 
-void Player::renderRowShape(int n) const { // tested
+std::string Player::renderRowShape(int n) const { // tested
+    std::string shape_str = "";
     if(nextShape) {
         std::vector<std::vector<char>> grid = nextShape->getGrid();
         for(int i = 0; i < 4; ++i) {
-            std::cout << grid[n][i];
+            shape_str += grid[n][i];
+            // std::cout << grid[n][i];
         }
     } 
     else {
-        std::cout << "    ";
+        shape_str += "    ";
+        // std::cout << "    ";
     }
 }
