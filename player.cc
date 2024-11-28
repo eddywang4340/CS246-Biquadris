@@ -3,9 +3,9 @@
 
 using namespace std;
 
-Player::Player(int level, std::string file):
+Player::Player(int level, std::string file): 
     studio{}, totalRowsCleared{0}, highScore{0},
-    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{file == ""}
+    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{file.length() == 0}
 {
     // Initialize level based on parameter
     if(level == 0) { lvl = new LevelOne(); } /// no level 0
@@ -13,9 +13,9 @@ Player::Player(int level, std::string file):
     else if(level == 2) { lvl = new LevelTwo(); }
     else if(level == 3) { lvl = new LevelThree(file); }
     else { lvl = new LevelFour(file); }
-
-    setNextShape();
-    shape = nullptr;
+	
+	shape = lvl->getRand();
+	nextShape = lvl->getRand();
 }
 
 Player::~Player() {
@@ -74,16 +74,16 @@ void Player::resetBoard() {
     delete shape;
     delete nextShape;
     shape = nullptr;
-    setNextShape();
+    nextShape = lvl->getRand();
 }
 
 bool Player::handleMovement(int moveCol, int moveRow) {
-    if(moveCol != 0 && canMove(0, moveCol)) {
+    if(moveCol != 0 && canMove(0, moveCol)) { // horizontal
         shape->move(moveCol, 0);
         
-        int down = 0;
-        if(isHeavy) down = 2;
-        else if(lvl->getLevel() >= 3) down = 1;
+        int down = moveRow;
+        if(isHeavy) down += 2;
+        else if(lvl->getLevel() >= 3) down += 1;
         
         if(down > 0) {
             if(!canMove(down, 0)) {
@@ -99,15 +99,16 @@ bool Player::handleMovement(int moveCol, int moveRow) {
     
     return false;
 }
-
+/* 
 void Player::setNextShape() {
+	if (nextShape) shape = nextShape;
     if(isRand) nextShape = lvl->getRand();
-    else nextShape = lvl->getNotRand();
-}
+    else nextShape = nullptr; // lvl->getNotRand();
+} */
 
 void Player::updateTurn(string cmd) {
-    if(shape == nullptr) setNextShape();
-
+    if(shape == nullptr) shape = nextShape;
+    
     //Level commands
     if(cmd == "levelup") {
         setNextLevel();
