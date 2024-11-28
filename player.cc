@@ -227,14 +227,14 @@ std::string Player::renderRow(int n) { // tested
 std::string Player::renderRowShape(int n) const { // tested
     std::string shape_str = "";
     if(nextShape) {
-        std::vector<std::vector<char>> grid = nextShape->getGrid();
-        for(int i = 0; i < 4; ++i) {
-            shape_str += grid[n][i];
-            // std::cout << grid[n][i];
+        for(int i = 0; i < 4; i++) {
+            shape_str += nextShape->charAt(i, n);
         }
     } 
     else {
         shape_str += "    ";
         // std::cout << "    ";
     }
+
+    return shape_str;
 }
