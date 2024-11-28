@@ -3,6 +3,7 @@
 
 // import classes
 #include "player.h"
+#include "xwindow.h"
 // #include "gameproperties.h"
 
 class Game {
@@ -10,6 +11,7 @@ class Game {
     Player player1, player2;
     // GameProperties &GP;
     int turnAcc;
+    Xwindow window;
 
     // public members
     public:
@@ -18,6 +20,8 @@ class Game {
         void update();
         void render();
         void restart();
+        void initializeGraphics();
+        void graphicRender();
 };
 
 #endif
