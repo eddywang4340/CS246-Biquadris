@@ -26,7 +26,6 @@ Player::~Player() {
 
 void Player::setNextLevel() { //tested
     int currentLevel = lvl->getLevel();
-	cout << "Current Level: " << currentLevel << endl;
     Level* newLevel = nullptr;
     
     if(currentLevel < 4) {
