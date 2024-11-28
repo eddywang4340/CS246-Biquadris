@@ -188,3 +188,11 @@ TShape::TShape(): Shape{3, 2, 'T'}  { //tested
 
 	addShape();
 }
+
+RandShape::RandShape(): Shape{1, 1, '*'} {
+	vector<char> r1;
+	r1.insert(r1.end(), {c});
+	shape.insert(shape.end(), {r1});
+
+	addShape();
+}

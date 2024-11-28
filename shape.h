@@ -62,4 +62,9 @@ class TShape: public Shape {
 		TShape();
 };
 
+class RandShape: public Shape {
+	public:
+		RandShape();
+};
+
 #endif

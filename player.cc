@@ -78,41 +78,37 @@ void Player::resetBoard() {
 
 void Player::handleMovement(int moveCol, int moveRow) {
     if(moveCol != 0 && canMove(0, moveCol)) shape->move(moveCol, 0);
-    
+
     int down = moveRow;
     if(lvl->getLevel() >= 3) down = 1;
     if(isHeavy) down += 2;
-    
+
     if(down > 0) {
         if(!canMove(down, 0)) dropBlock();
         else shape->move(0, down);
     }
 }
 
-void Player::updateTurn(string cmd) {
+void Player::updateTurn(string cmd) { // tested
     if(shape == nullptr) shape = nextShape;
     
     //Level commands
     if(cmd == "levelup") {
         setNextLevel();
         return;
-    } 
-    else if(cmd == "leveldown") {
+    } else if(cmd == "leveldown") {
         setDownLevel();
         return;
     }
 
 	if (cmd == "clockwise") {
 		shape->rotateCW();
-	} 
-    else if (cmd == "counterclockwise") {
+	} else if (cmd == "counterclockwise") {
 		shape->rotateCCW();
 	}
 
-
     //Movement commands
     int moveRow = 0, moveCol = 0;
-    
     if(cmd == "left") {
         moveCol = -1; handleMovement(moveCol, moveRow);
     }
@@ -123,9 +119,24 @@ void Player::updateTurn(string cmd) {
         moveRow = 1; handleMovement(moveCol, moveRow);
     }
     else if(cmd == "drop") dropBlock();
+
+	
+	if (lvl->getLevel() == 4) {
+		int idx = lvl->dropRandBlock();
+		if (idx != -1) {
+			cout << "Index: " << idx << endl;
+			Shape* rand = new RandShape();
+			rand->move(idx, 0);
+
+			Shape* cur = shape, *next = nextShape;
+			shape = rand; dropBlock();
+			shape = cur; nextShape = next;
+		}
+	}
 }
 
 void Player::dropBlock() { // tested
+	lvl->setTime(0);
     while(canMove(1, 0)) {
         shape->move(0, 1);
     }
@@ -162,7 +173,7 @@ int Player::getHighScore() {
     return highScore; 
 }
 
-bool Player::canMove(int r, int c) {
+bool Player::canMove(int r, int c) { // tested
     int nt = shape->getT() + r;
     int nl = shape->getL() + c;
     

@@ -12,7 +12,7 @@ using namespace std;
 
 int main() {
 	srand(time(0)); // KEEP THIS
-	Player p1 = Player();
+	Player p1 = Player(4);
 	string cmd;
 
 	cout << "----" << endl;

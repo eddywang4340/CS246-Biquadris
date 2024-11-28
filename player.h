@@ -18,8 +18,7 @@ class Player {
     int highScore;
     bool lost, isBlind, isHeavy, isForce, isRand;
 
-    void handleMovement(int col, int row);
-    // void setNextShape();
+    void handleMovement(int moveCol, int moveRow);
 
 public:
     Player(int lvl = 0, std::string file = "");
