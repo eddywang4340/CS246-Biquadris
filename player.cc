@@ -85,7 +85,7 @@ void Player::handleMovement(int moveCol, int moveRow) {
     
     if(down > 0) {
         if(!canMove(down, 0)) dropBlock();
-        shape->move(0, down);
+        else shape->move(0, down);
     }
 }
 /* 
