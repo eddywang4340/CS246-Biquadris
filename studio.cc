@@ -24,7 +24,7 @@ int Studio::canRemove() {
                 break;
             }
         }
-        if (canRemove) {
+        if(canRemove) {
             return i;
         }
     }

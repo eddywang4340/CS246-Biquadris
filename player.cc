@@ -112,16 +112,19 @@ void Player::updateTurn(string cmd) {
     if(cmd == "levelup") {
         setNextLevel();
         return;
-    } else if(cmd == "leveldown") {
+    } 
+    else if(cmd == "leveldown") {
         setDownLevel();
         return;
     }
 
 	if (cmd == "clockwise") {
 		shape->rotateCW();
-	} else if (cmd == "counterclockwise") {
+	} 
+    else if (cmd == "counterclockwise") {
 		shape->rotateCCW();
 	}
+
 
     //Movement commands
     int moveRow = 0, moveCol = 0;
