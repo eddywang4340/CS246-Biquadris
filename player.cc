@@ -26,7 +26,6 @@ Player::~Player() {
 
 void Player::setNextLevel() { //tested
     int currentLevel = lvl->getLevel();
-	cout << "Current Level: " << currentLevel << endl;
     Level* newLevel = nullptr;
     
     if(currentLevel < 4) {
@@ -91,13 +90,16 @@ bool Player::handleMovement(int moveCol, int moveRow) {
             }
             shape->move(0, down);
         }
+
+		return false;
     }
     
     if(moveRow > 0 && canMove(moveRow, 0)) {
         shape->move(0, moveRow);
+		return false;
     }
     
-    return false;
+    return true;
 }
 /* 
 void Player::setNextShape() {
@@ -132,7 +134,7 @@ void Player::updateTurn(string cmd) {
     else if(cmd == "down") moveRow = 1;
     else if(cmd == "drop") dropBlock();
 
-    if(handleMovement(moveCol, moveRow)) dropBlock();
+    if(handleMovement(moveCol, moveRow) && (cmd == "left" || cmd == "right" || cmd == "down")) dropBlock();
 }
 
 void Player::dropBlock() { // tested
