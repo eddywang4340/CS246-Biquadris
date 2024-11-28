@@ -3,11 +3,14 @@
 
 // import classes
 #include "player.h"
+#include "shapeObserver.h"
+#include "shape.h"
+
 #include "xwindow.h"
 #include "shape.h"
 // #include "gameproperties.h"
 
-class Game {
+class Game : public ShapeObserver {
     // private members
     Player player1, player2;
     // GameProperties &GP;
@@ -24,6 +27,8 @@ class Game {
         void render();
         void restart();
         void initializeGraphics();
+
+        void onShapeMove(Shape* shape, int oldX, int oldY);
 };
 
 #endif

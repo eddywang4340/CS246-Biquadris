@@ -1,1 +1,4 @@
-.vscode/ *.d *.o gcm.cache
+.vscode/ 
+*.d 
+*.o 
+gcm.cache
