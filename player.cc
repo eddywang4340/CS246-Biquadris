@@ -76,30 +76,17 @@ void Player::resetBoard() {
     nextShape = lvl->getRand();
 }
 
-bool Player::handleMovement(int moveCol, int moveRow) {
-    if(moveCol != 0 && canMove(0, moveCol)) { // horizontal
-        shape->move(moveCol, 0);
-        
-        int down = moveRow;
-        if(isHeavy) down += 2;
-        else if(lvl->getLevel() >= 3) down += 1;
-        
-        if(down > 0) {
-            if(!canMove(down, 0)) {
-                return true;
-            }
-            shape->move(0, down);
-        }
-
-		return false;
-    }
+void Player::handleMovement(int moveCol, int moveRow) {
+    if(moveCol != 0 && canMove(0, moveCol)) shape->move(moveCol, 0);
     
-    if(moveRow > 0 && canMove(moveRow, 0)) {
-        shape->move(0, moveRow);
-		return false;
-    }
+    int down = moveRow;
+    if(lvl->getLevel() >= 3) down = 1;
+    if(isHeavy) down += 2;
     
-    return true;
+    if(down > 0) {
+        if(!canMove(down, 0)) dropBlock();
+        else shape->move(0, down);
+    }
 }
 /* 
 void Player::setNextShape() {
@@ -115,26 +102,33 @@ void Player::updateTurn(string cmd) {
     if(cmd == "levelup") {
         setNextLevel();
         return;
-    } else if(cmd == "leveldown") {
+    } 
+    else if(cmd == "leveldown") {
         setDownLevel();
         return;
     }
 
 	if (cmd == "clockwise") {
 		shape->rotateCW();
-	} else if (cmd == "counterclockwise") {
+	} 
+    else if (cmd == "counterclockwise") {
 		shape->rotateCCW();
 	}
+
 
     //Movement commands
     int moveRow = 0, moveCol = 0;
     
-    if(cmd == "left") moveCol = -1;
-    else if(cmd == "right") moveCol = 1;
-    else if(cmd == "down") moveRow = 1;
+    if(cmd == "left") {
+        moveCol = -1; handleMovement(moveCol, moveRow);
+    }
+    else if(cmd == "right") {
+        moveCol = 1; handleMovement(moveCol, moveRow);
+    }
+    else if(cmd == "down") {
+        moveRow = 1; handleMovement(moveCol, moveRow);
+    }
     else if(cmd == "drop") dropBlock();
-
-    if(handleMovement(moveCol, moveRow) && (cmd == "left" || cmd == "right" || cmd == "down")) dropBlock();
 }
 
 void Player::dropBlock() { // tested
