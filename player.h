@@ -40,7 +40,7 @@ public:
 
     void setBlind() { isBlind = true; }
     void setHeavy() { isHeavy = true; }
-    void setForce() { isForce = true; }
+    void setShape(char c);
     
     void setNextLevel();
 	void setDownLevel();
