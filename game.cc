@@ -74,11 +74,11 @@ void Game::render() {
         // render in graphical display
         // display each player's level
         window->drawString(0, 0, "Level: " + std::to_string(player1.getLevel())); // Player 1's level
-        window->drawString(21, 0, "Level: " + std::to_string(player2.getLevel())); // Player 2's level
+        window->drawString(21 * 20, 0, "Level: " + std::to_string(player2.getLevel())); // Player 2's level
 
         // display each player's score
-        window->drawString(0, 1, "Score: " + std::to_string(player1.getScore())); // Player 1's score
-        window->drawString(21, 1, "Score: " + std::to_string(player2.getScore())); // Player 2's score
+        window->drawString(0, 1 * 20, "Score: " + std::to_string(player1.getScore())); // Player 1's score
+        window->drawString(21 * 20, 1 * 20, "Score: " + std::to_string(player2.getScore())); // Player 2's score
 
         int colour1 = 0;
         int colour2 = 0;
@@ -100,9 +100,9 @@ void Game::render() {
         int colour1_shape = 0;
         int colour2_shape = 0;
         // render next shape
-        window->drawString(0, GAME_NUM_ROW + 2, "Next:");
-        window->drawString(21, GAME_NUM_ROW + 2, "Next:");
-        for (int i = 0; i < GAME_NUM_ROW; ++i) {
+        window->drawString(0 * 20, (GAME_NUM_ROW + 2) * 20, "Next:");
+        window->drawString(21 * 20, (GAME_NUM_ROW + 2) * 20, "Next:");
+        for (int i = 0; i < SHAPE_GRID_NUM_ROW; ++i) {
             std::string shape_row1 = player1.renderRowShape(i);
             std::string shape_row2 = player2.renderRowShape(i);
             for (int j = 0; j < SHAPE_GRID_NUM_COL; ++j) {

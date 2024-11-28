@@ -13,7 +13,7 @@ using namespace std;
 
 int main() {
 	srand(time(0)); // KEEP THIS
-	Game g = Game(4, 4, "", "", false);
+	Game g = Game(4, 4, "", "", true);
 	string cmd;
 
 	cout << "----" << endl;
