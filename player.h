@@ -4,7 +4,6 @@
 #include "level.h"
 #include "studio.h"
 #include "shape.h"
-#include "game.h"
 
 #include <string>
 #include <iostream>
@@ -14,8 +13,6 @@ class Player {
     Studio studio;
     Shape* shape;
     Shape* nextShape;
-
-    Game* game;
     
     int totalRowsCleared;
     int highScore;
@@ -24,7 +21,7 @@ class Player {
     void handleMovement(int moveCol, int moveRow);
 
 public:
-    Player(int lvl = 0, Game* game, std::string file = "");
+    Player(int lvl = 0, std::string file = "");
     ~Player();
 
     void updateTurn(std::string cmd);

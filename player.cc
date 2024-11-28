@@ -1,9 +1,9 @@
 #include "player.h"
+#include "shape.h"
 
 using namespace std;
 
-Player::Player(int level, Game* game, std::string file):
-    game{game},
+Player::Player(int level, std::string file): 
     studio{}, totalRowsCleared{0}, highScore{0},
     lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{file.length() == 0}
 {
@@ -14,7 +14,7 @@ Player::Player(int level, Game* game, std::string file):
     else if(level == 3) { lvl = new LevelThree(file); }
     else { lvl = new LevelFour(file); }
 	
-	shape = lvl->getRand(); shape->attach(game);
+	shape = lvl->getRand();
 	nextShape = lvl->getRand();
 }
 
@@ -90,10 +90,7 @@ void Player::handleMovement(int moveCol, int moveRow) {
 }
 
 void Player::updateTurn(string cmd) { // tested
-    if(shape == nullptr) {
-        shape = nextShape; shape->attach(game);
-        nextShape = lvl->getRand(); move(0,0);
-    }
+    if(shape == nullptr) shape = nextShape;
     
     //Level commands
     if(cmd == "levelup") {
@@ -134,8 +131,6 @@ void Player::updateTurn(string cmd) { // tested
 			Shape* cur = shape, *next = nextShape;
 			shape = rand; dropBlock();
 			shape = cur; nextShape = next;
-
-            shape->attach(game); shape->move(0,0);
 		}
 	}
 }
@@ -164,7 +159,7 @@ void Player::dropBlock() { // tested
     studio.setBoard(board);
     
     delete shape;
-    shape = nextShape; shape->attach(game); shape->move(0,0);
+    shape = nextShape;
 	nextShape = lvl->getRand();
     
     while(studio.canRemove() != -1) {

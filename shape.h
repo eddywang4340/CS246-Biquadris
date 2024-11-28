@@ -1,8 +1,6 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 #include <vector>
-#include "shapeObserver.h"
-
 using namespace std;
 
 class Shape {
@@ -11,8 +9,6 @@ class Shape {
 		vector<vector<char>> shape;
 		int o_top, i_top, o_left, i_left, o_width, i_width, o_height, i_height;
 		char c;
-
-        vector<ShapeObserver*> observers;
 
 	public:
 		Shape(int i_width, int i_height, char c);
@@ -29,9 +25,6 @@ class Shape {
         int getL() { return o_left; }
         int getWidth();
         int getHeight();
-
-        void attach(ShapeObserver* observer);
-        void detach(ShapeObserver* observer);
 };
 
 class LShape: public Shape {

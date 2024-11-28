@@ -5,9 +5,18 @@
 #include <iomanip>
 
 Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file, bool isGraphics):
-    player1{player1_lvl, this, player2_file}, player2{player2_lvl, this, player2_file}, turnAcc{0}, isGraphics{isGraphics}
+    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}
 { 
     initializeGraphics();
+    for (int i = 0; i < GAME_NUM_ROW; ++i) {
+        // populate a blank row
+        std::vector<char> row;
+        for (int j = 0; j < GAME_NUM_COL; ++j) {
+            row.emplace_back(' ');
+        }
+        player1_board.emplace_back(row);
+        player2_board.emplace_back(row);
+    }
 }
 
 Game::~Game() { delete window; }
@@ -79,22 +88,31 @@ void Game::render() {
         window->drawString(0, 2 * 20, "Score: " + std::to_string(player1.getScore())); // Player 1's score
         window->drawString(21 * 20, 2 * 20, "Score: " + std::to_string(player2.getScore())); // Player 2's score
 
-        // int colour1 = 0;
-        // int colour2 = 0;
+        int colour1 = 0;
+        int colour2 = 0;
         // Render board
-        // for (int i = 0; i < GAME_NUM_ROW; ++i) {
-        //     std::string row1 = player1.renderRow(i);
-        //     std::string row2 = player2.renderRow(i);
-        //     for (int j = 0; j < GAME_NUM_COL; ++j) {
-        //         // check character for player 1 and display
-        //         colour1 = CHAR_TO_COLOUR[row1[j]];
-        //         window->fillRectangle(j * 20, (i + 3) * 20, 20, 20, colour1);
-
-        //         // check character for player 2 and display
-        //         colour2 = CHAR_TO_COLOUR[row2[j]];
-        //         window->fillRectangle((j + 21) * 20, (i + 3) * 20, 20, 20, colour2);
-        //     }
-        // }
+        for (int i = 0; i < GAME_NUM_ROW; ++i) {
+            // getting string from board
+            std::string row1 = player1.renderRow(i);
+            std::string row2 = player2.renderRow(i);
+            for (int j = 0; j < GAME_NUM_COL; ++j) {
+                // logic: only render the board if it is different then previous
+                if (player1_board[j][i] != row1[j]) {
+                    // check character for player 1 and display
+                    colour1 = CHAR_TO_COLOUR[row1[j]];
+                    // window->getPixelColour(j * 20, (i + 3) * 20);
+                    window->fillRectangle(j * 20, (i + 3) * 20, 20, 20, colour1);
+                    player1_board[j][i] = row1[j];
+                }
+                if (player2_board[j][i] != row2[j]) {
+                    // check character for player 2 and display
+                    colour2 = CHAR_TO_COLOUR[row2[j]];
+                    window->fillRectangle((j + 21) * 20, (i + 3) * 20, 20, 20, colour2);
+                    // window->getPixelColour(j * 20, (i + 3) * 20);
+                    player2_board[j][i] = row2[j];
+                }
+            }
+        }
 
         int colour1_shape = 0;
         int colour2_shape = 0;
@@ -174,30 +192,5 @@ void Game::restart() {
 void Game::initializeGraphics() {
     if (isGraphics) {
         window = new Xwindow {(2 * GAME_NUM_COL + 10) * 20, (GAME_NUM_ROW + 10) * 20};
-    }
-}
-
-void Game::onShapeMove(Shape *shape, int oldX, int oldY) {
-    if(!isGraphics) return;
-
-    for(int i = 0; i < shape->getHeight(); ++i) {
-        for(int j = 0; j < shape->getWidth(); ++j) {
-            if(shape->charAt(j, i) != ' ') {
-                int x = (oldX + j) * 20;
-                int y = (oldY + i + 3) * 20;
-                window->fillRectangle(x, y, 20, 20, 0);
-            }
-        }
-    }
-    
-    for(int i = 0; i < shape->getHeight(); ++i) {
-        for(int j = 0; j < shape->getWidth(); ++j) {
-            char c = shape->charAt(j, i);
-            if(c != ' ') {
-                int x = (shape->getL() + j) * 20;
-                int y = (shape->getT() + i + 3) * 20;
-                window->fillRectangle(x, y, 20, 20, CHAR_TO_COLOUR[c]);
-            }
-        }
     }
 }
