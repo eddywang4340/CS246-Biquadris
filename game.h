@@ -4,6 +4,7 @@
 // import classes
 #include "player.h"
 #include "xwindow.h"
+#include "shape.h"
 // #include "gameproperties.h"
 
 class Game {

@@ -166,6 +166,10 @@ void Player::dropBlock() { // tested
         studio.removeRow();
         totalRowsCleared++;
     }
+
+	isHeavy = false;
+	isForce = false;
+	isBlind = false;
 }
 
 int Player::getHighScore() {
@@ -237,4 +241,45 @@ std::string Player::renderRowShape(int n) const { // tested
     }
 
     return shape_str;
+}
+
+void Player::setShape(char c) {
+	delete shape;
+	
+	switch(c) {
+		case 'I': {
+			shape = new IShape();
+			break;
+		}
+
+		case 'J': {
+			shape = new JShape();
+			break;
+		}
+
+		case 'L': {
+			shape = new LShape();
+			break;
+		}
+
+		case 'O': {
+			shape = new OShape();
+			break;
+		}
+
+		case 'S': {
+			shape = new SShape();
+			break;
+		}
+
+		case 'Z': {
+			shape = new ZShape();
+			break;
+		}
+
+		case 'T': {
+			shape = new TShape();
+			break;
+		}
+	}
 }

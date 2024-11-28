@@ -1,6 +1,7 @@
 #include "game.h"
 #include "constants.h"
 #include "xwindow.h"
+#include "shape.h"
 #include <iostream>
 #include <iomanip>
 
@@ -8,6 +9,7 @@ Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::stri
     player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}
 { 
     initializeGraphics();
+	render();
 }
 
 Game::~Game() { delete window; }
@@ -34,7 +36,6 @@ std::string Game::getWinner() {
 
 void Game::update() {
     while (true) {
-        render();
         std::string command;
         std::cin >> command;
         if (std::cin.eof() || command == "restart") {
@@ -50,20 +51,56 @@ void Game::update() {
 
         // Checking which player's turn it is
         if (turnAcc % 2 == 0) {
+			int prev = player1.getRowsCleared();
+			player1.updateTurn(command);
+			render();
 
             // Signals end of turn
             if (command == "drop") {
                 turnAcc++;
+
+				if (player1.getRowsCleared() - prev >= 2) {
+					cout << "Player 1 gets a powerup! Would you like to apply heavy, force or blind?" << endl;
+					string cmd;
+					cin >> cmd;
+
+					if (cmd == "heavy") player2.setHeavy();
+					else if (cmd == "force") {
+						cout << "What shape do you want the opponent to have next? (I, J, L, O, S, Z, T)" << endl;
+						char shape;
+						cin >> shape;
+						player2.setShape(shape);
+						
+					}
+					else { player2.setBlind(); }
+					render();
+				}
             }
-            player1.updateTurn(command);
         } else {
-            
+			int prev = player2.getRowsCleared();
+			player2.updateTurn(command);
+			render();
 
              // Signals end of turn
             if (command == "drop") {
                 turnAcc++;
+				if (player2.getRowsCleared() - prev >= 2) {
+					cout << "Player 2 gets a powerup! Would you like to apply heavy, force or blind?" << endl;
+					string cmd;
+					cin >> cmd;
+
+					if (cmd == "heavy") player1.setHeavy();
+					else if (cmd == "force") {
+						cout << "What shape do you want the opponent to have next? (I, J, L, O, S, Z, T)" << endl;
+						char shape;
+						cin >> shape;
+						player1.setShape(shape);
+					}
+					else { player1.setBlind(); }
+					render();
+				}
             }
-            player2.updateTurn(command);
+			
         }
     }
 }
