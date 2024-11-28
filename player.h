@@ -19,10 +19,10 @@ class Player {
     bool lost, isBlind, isHeavy, isForce, isRand;
 
     bool handleMovement(int col, int row);
-    void setNextShape();
+    // void setNextShape();
 
 public:
-    Player(int lvl = 0, std::string file = "test.in");
+    Player(int lvl = 0, std::string file = "");
     ~Player();
 
     void updateTurn(std::string cmd);
