@@ -8,8 +8,6 @@
 Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file, bool isGraphics):
     player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}
 { 
-    initializeGraphics();
-	render();
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         // populate a blank row
         std::vector<char> row;
@@ -19,6 +17,8 @@ Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::stri
         player1_board.emplace_back(row);
         player2_board.emplace_back(row);
     }
+    initializeGraphics();
+	render();
 }
 
 Game::~Game() { delete window; }
@@ -50,7 +50,8 @@ void Game::update() {
         if (std::cin.eof() || command == "restart") {
             // reached end of file or restart, end the game
             std::string winner = getWinner();
-            std::cout << winner << " has won!" << std::endl;
+            if (winner != "Tie") std::cout << winner << " has won!" << std::endl;
+            else { cout << winner << endl; }
             if (command == "restart") {
                 // restart game
                 restart();
@@ -62,12 +63,13 @@ void Game::update() {
         if (turnAcc % 2 == 0) {
 			int prev = player1.getRowsCleared();
 			player1.updateTurn(command);
+
+            if (command == "drop") turnAcc++;
+
 			render();
 
             // Signals end of turn
             if (command == "drop") {
-                turnAcc++;
-
 				if (player1.getRowsCleared() - prev >= 2) {
 					cout << "Player 1 gets a powerup! Would you like to apply heavy, force or blind?" << endl;
 					string cmd;
@@ -85,14 +87,17 @@ void Game::update() {
 					render();
 				}
             }
+
         } else {
 			int prev = player2.getRowsCleared();
 			player2.updateTurn(command);
+
+            if (command == "drop") turnAcc++;
+
 			render();
 
              // Signals end of turn
             if (command == "drop") {
-                turnAcc++;
 				if (player2.getRowsCleared() - prev >= 2) {
 					cout << "Player 2 gets a powerup! Would you like to apply heavy, force or blind?" << endl;
 					string cmd;
@@ -108,6 +113,7 @@ void Game::update() {
 					else { player1.setBlind(); }
 					render();
 				}
+                turnAcc++;
             }
 			
         }
@@ -203,8 +209,10 @@ void Game::render() {
         std::cout << std::endl;
     }
 
-	if (turnAcc % 2 == 0) cout << "Player 1's turn" << endl;
-	else {cout << "Player 2's turn" << endl; }
+    if (turnAcc % 2 == 0) cout << "Player 1's turn:" << endl;
+    else {
+        cout << "Player 2's turn:" << endl;
+    }
 }
 
 void Game::restart() {
