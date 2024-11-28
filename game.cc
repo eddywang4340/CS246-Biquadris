@@ -1,5 +1,6 @@
 #include "game.h"
 #include "constants.h"
+#include "xwindow.h"
 #include <iostream>
 #include <iomanip>
 
@@ -107,4 +108,20 @@ void Game::restart() {
     // Reset player's game boards
     player1.resetBoard();
     player2.resetBoard();
+}
+
+void Game::initializeGraphics() {
+    window{Xwindow{2 * GAME_NUM_COL + 10, GAME_NUM_ROW + 10}};
+}
+
+void Game::graphicRender() {
+    // display each player's level
+    window.drawString(0, 0, "Level: " + std::to_string(player1.getLevel())); // Player 1's level
+    window.drawString(21, 0, "Level: " + std::to_string(player2.getLevel())); // Player 2's level
+
+    // display each player's score
+    window.drawString(0, 1, "Score: " + std::to_string(player1.getScore())); // Player 1's score
+    window.drawString(21, 1, "Score: " + std::to_string(player2.getScore())); // Player 2's score
+
+    // Render board
 }

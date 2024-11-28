@@ -18,7 +18,7 @@ class Player {
     int highScore;
     bool lost, isBlind, isHeavy, isForce, isRand;
 
-    bool handleMovement(int col, int row);
+    void handleMovement(int col, int row);
     // void setNextShape();
 
 public:
