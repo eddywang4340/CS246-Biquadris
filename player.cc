@@ -92,7 +92,7 @@ void Player::handleMovement(int moveCol, int moveRow) {
 void Player::updateTurn(string cmd) { // tested
     if(shape == nullptr) {
         shape = nextShape; shape->attach(game);
-        nextShape = lvl->getRand(); move(0,0);
+        nextShape = lvl->getRand(); shape->move(0,0);
     }
     
     //Level commands

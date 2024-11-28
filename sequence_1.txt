@@ -1,0 +1,11 @@
+2
+3
+right
+right
+clockwise
+drop
+left
+counterclockwise
+left 
+drop
+restart
