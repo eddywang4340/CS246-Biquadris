@@ -6,7 +6,9 @@
 
 Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file, bool isGraphics):
     player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}
-{ }
+{ 
+    initializeGraphics();
+}
 
 Game::~Game() { delete window; }
 
@@ -32,6 +34,7 @@ std::string Game::getWinner() {
 
 void Game::update() {
     while (true) {
+        render();
         std::string command;
         std::cin >> command;
         if (std::cin.eof() || command == "restart") {
@@ -86,11 +89,11 @@ void Game::render() {
             for (int j = 0; j < GAME_NUM_COL; ++j) {
                 // check character for player 1 and display
                 colour1 = CHAR_TO_COLOUR[row1[j]];
-                window->fillRectangle(j, i + 2, 1, 1, colour1);
+                window->fillRectangle(j * 20, (i + 2) * 20, 20, 20, colour1);
 
                 // check character for player 2 and display
                 colour2 = CHAR_TO_COLOUR[row2[j]];
-                window->fillRectangle(j + 21, i + 2, 1, 1, colour2);
+                window->fillRectangle((j + 21) * 20, (i + 2) * 20, 20, 20, colour2);
             }
         }
 
@@ -105,11 +108,11 @@ void Game::render() {
             for (int j = 0; j < SHAPE_GRID_NUM_COL; ++j) {
                 // check character for player 1 and display
                 colour1_shape = CHAR_TO_COLOUR[shape_row1[j]];
-                window->fillRectangle(j, i + GAME_NUM_ROW + 3, 1, 1, colour1_shape);
+                window->fillRectangle(j * 20, (i + GAME_NUM_ROW + 3) * 20, 20, 20, colour1_shape);
 
                 // check character for player 2 and display
                 colour2_shape = CHAR_TO_COLOUR[shape_row2[j]];
-                window->fillRectangle(j + 21, i + GAME_NUM_ROW + 3, 1, 1, colour2_shape);
+                window->fillRectangle((j + 21) * 20, (i + GAME_NUM_ROW + 3) * 20, 20, 20, colour2_shape);
             }
         }
     }
@@ -168,6 +171,6 @@ void Game::restart() {
 
 void Game::initializeGraphics() {
     if (isGraphics) {
-        window = new Xwindow {2 * GAME_NUM_COL + 10, GAME_NUM_ROW + 10};
+        window = new Xwindow {(2 * GAME_NUM_COL + 10) * 20, (GAME_NUM_ROW + 10) * 20};
     }
 }
