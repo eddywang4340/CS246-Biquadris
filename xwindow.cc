@@ -71,3 +71,13 @@ void Xwindow::drawString(int x, int y, string msg) {
     XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
 }
 
+void Xwindow::getPixelColour(int x, int y) {
+    XColor c;
+    XImage *image;
+    image = XGetImage (d, XRootWindow (d, XDefaultScreen (d)), x, y, 1, 1, AllPlanes, XYPixmap);
+    c.pixel = XGetPixel (image, 0, 0);
+    XFree (image);
+    XQueryColor (d, XDefaultColormap(d, XDefaultScreen (d)), &c);
+    cout << c.red << " " << c.green << " " << c.blue << "\n";
+}
+

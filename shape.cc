@@ -20,11 +20,8 @@ void Shape::createEmptyShape() { // tested
 }
 
 void Shape::move(int x, int y) {
-    int old_left = o_left, old_top = o_top;
 	o_left += x;
 	o_top += y;
-
-    for(auto observer : observers) observer->onShapeMoved(this, old_left, old_top);
 };
 
 void Shape::createShape(vector<vector<char>> newShape) { // tested
@@ -128,16 +125,6 @@ int Shape::getWidth() {
 }
 int Shape::getHeight() {
     return i_height;
-}
-
-void Shape::attach(ShapeObserver *observer) {
-    observers.emplace_back(observer);
-}
-
-void Shape::detach(ShapeObserver *observer) {
-    for(int i = 0; i < observers.size(); i++) {
-        if(observers[i] == observer) observers.erase(observers.begin() + i);
-    }
 }
 
 LShape::LShape(): Shape{3, 2, 'L'}  { //tested

@@ -3,16 +3,15 @@
 
 // import classes
 #include "player.h"
-#include "shapeObserver.h"
-#include "shape.h"
-
 #include "xwindow.h"
 #include "shape.h"
 // #include "gameproperties.h"
 
-class Game : public ShapeObserver {
+class Game {
     // private members
     Player player1, player2;
+    std::vector<std::vector<char>> player1_board;
+    std::vector<std::vector<char>> player2_board;
     // GameProperties &GP;
     int turnAcc;
     Xwindow *window;
@@ -27,8 +26,6 @@ class Game : public ShapeObserver {
         void render();
         void restart();
         void initializeGraphics();
-
-        void onShapeMove(Shape* shape, int oldX, int oldY);
 };
 
 #endif
