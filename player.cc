@@ -101,12 +101,6 @@ bool Player::handleMovement(int moveCol, int moveRow) {
     
     return true;
 }
-/* 
-void Player::setNextShape() {
-	if (nextShape) shape = nextShape;
-    if(isRand) nextShape = lvl->getRand();
-    else nextShape = nullptr; // lvl->getNotRand();
-} */
 
 void Player::updateTurn(string cmd) {
     if(shape == nullptr) shape = nextShape;

@@ -31,5 +31,7 @@ int main() {
 		}
 
 		cout << "----" << endl;
+		cout << p1.getScore() << endl;
+		cout << "----" << endl;
 	}
 } 
