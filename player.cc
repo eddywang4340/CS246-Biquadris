@@ -171,7 +171,6 @@ int Player::calculateDropDistance() {
 
 void Player::updateTurn(string cmd) { // tested
     if(shape == nullptr) {
-		cout << "Shape is null" << endl;
 		shape = nextShape;
         if (isRand || lvl->getLevel() == 0) {
 			char c;
@@ -182,6 +181,12 @@ void Player::updateTurn(string cmd) { // tested
         	nextShape = lvl->getRand(); 
 		}
     }
+
+	// change blcok commands
+	if (cmd == "I" || cmd == "J" || cmd == "O" || cmd == "S" || cmd == "Z" || cmd == "T" || cmd == "L") {
+		setShape(cmd[0]);
+		generateShadow();
+	}
 
 	// random commands
 	if (cmd == "random") isRand = true;

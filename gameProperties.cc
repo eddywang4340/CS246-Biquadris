@@ -20,6 +20,13 @@ GameProperties::GameProperties(string file) : file{file} {
         {"D", "drop"},
         {"c", "clockwise"},
         {"cc", "counterclockwise"},
+		{"I", "I"},
+		{"J", "J"},
+		{"T", "T"},
+		{"O", "O"},
+		{"S", "S"},
+		{"Z", "Z"},
+		{"L", "L"},
 
         {"left", "left"},
         {"right", "right"},
