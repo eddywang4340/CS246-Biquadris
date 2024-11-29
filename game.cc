@@ -6,7 +6,7 @@
 #include <iomanip>
 
 Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file, bool isGraphics):
-    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}
+    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}, gameProps{}
 { 
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         // populate a blank row
@@ -21,7 +21,12 @@ Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::stri
 	render();
 }
 
-Game::~Game() { delete window; }
+Game::~Game() {
+    gameProps.setProp("highscore", stoi(max(player1.getHighScore(), player2.getHighScore())));
+
+    gameProps.saveFile();
+    delete window; 
+}
 
 std::string Game::getWinner() {
     // Checks to see which player lost
@@ -47,6 +52,9 @@ void Game::update() {
     while (true) {
         std::string command;
         std::cin >> command;
+
+        if(gameProps.get(command) != "") command = gameProps.get(command) != "";
+        
         if (std::cin.eof() || command == "restart") {
             // reached end of file or restart, end the game
             std::string winner = getWinner();
@@ -185,6 +193,12 @@ void Game::render() {
     // each player's score
     std::cout << "Score:" << setw(5) << setfill(' ') << right << player1.getScore() << "     ";
     std::cout << "Score:" << setw(5) << setfill(' ') << right << player2.getScore() << std::endl;
+
+    // highscore
+    int highscore = smax(player1.getHighScore(), player2.getHighScore());
+    gameProps.setProp("highscore", atoi(highscore));
+    std::cout << "Highscore:" << setw(5) << setfill(' ') << right << highscore << " ";
+    std::cout << "Highscore:" << setw(5) << setfill(' ') << right << highscore << std::endl;
 
     // separator
     std::cout << "-----------     -----------" << std::endl;

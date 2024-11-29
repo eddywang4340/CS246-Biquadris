@@ -5,6 +5,7 @@
 #include "player.h"
 #include "xwindow.h"
 #include "shape.h"
+#include "gameProperties.h"
 // #include "gameproperties.h"
 
 class Game {
@@ -16,6 +17,8 @@ class Game {
     int turnAcc;
     Xwindow *window;
     bool isGraphics;
+
+    GameProperties gameProps;
 
     // public members
     public:
