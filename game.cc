@@ -174,15 +174,21 @@ void Game::render() {
     if (isGraphics) {
         // render in graphical display
         // display each player's level
+        window->fillRectangle(0, 1 * 20 - 15, 100, 20, Xwindow::White);
         window->drawString(0, 1 * 20, "Level: " + std::to_string(player1.getLevel())); // Player 1's level
+        window->fillRectangle(21 * 20, 1 * 20 - 15, 100, 20, Xwindow::White);
         window->drawString(21 * 20, 1 * 20, "Level: " + std::to_string(player2.getLevel())); // Player 2's level
 
         // display each player's score
+        window->fillRectangle(0, 2 * 20 - 15, 100, 20, Xwindow::White);
         window->drawString(0, 2 * 20, "Score: " + std::to_string(player1.getScore())); // Player 1's score
+        window->fillRectangle(21 * 20, 2 * 20 - 15, 100, 20, Xwindow::White);
         window->drawString(21 * 20, 2 * 20, "Score: " + std::to_string(player2.getScore())); // Player 2's score
 
         // display each player's highscore
+        window->fillRectangle(0, 3 * 20 - 15, 100, 20, Xwindow::White);
         window->drawString(0, 3 * 20, "Highscore: " + std::to_string(player1.getHighScore())); // Player 1's highscore
+        window->fillRectangle(21 * 20, 3 * 20 - 15, 100, 20, Xwindow::White);
         window->drawString(21 * 20, 3 * 20, "Highscore: " + std::to_string(player2.getHighScore())); // Player 2's highscore
 
         int colour1 = 0;
