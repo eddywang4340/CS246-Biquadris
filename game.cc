@@ -87,7 +87,7 @@ void Game::update() {
 
 				if (command == "drop") turnAcc++;
 
-				render();
+            render();
 
 				// Signals end of turn
 				if (command == "drop") {
@@ -136,7 +136,7 @@ void Game::update() {
 
 				if (command == "drop") turnAcc++;
 
-				render();
+            render();
 
 				// Signals end of turn
 				if (command == "drop") {
@@ -177,6 +177,10 @@ void Game::render() {
         window->drawString(0, 2 * 20, "Score: " + std::to_string(player1.getScore())); // Player 1's score
         window->drawString(21 * 20, 2 * 20, "Score: " + std::to_string(player2.getScore())); // Player 2's score
 
+        // display each player's highscore
+        window->drawString(0, 3 * 20, "Highscore: " + std::to_string(player1.getHighScore())); // Player 1's highscore
+        window->drawString(21 * 20, 3 * 20, "Highscore: " + std::to_string(player2.getHighScore())); // Player 2's highscore
+
         int colour1 = 0;
         int colour2 = 0;
         // Render board
@@ -186,21 +190,25 @@ void Game::render() {
             std::string row2 = player2.renderRow(i);
             for (int j = 0; j < GAME_NUM_COL; ++j) {
                 // logic: only render the board if it is different then previous
-                if (player1_board[j][i] != row1[j] && ((turnAcc & 2 == 0) || turnAcc == 0)) {
+                if (player1_board[j][i] != row1[j] /*&& ((turnAcc % 2 == 0) || turnAcc == 0)*/) {
                     // check character for player 1 and display
                     colour1 = CHAR_TO_COLOUR[row1[j]];
-                    if (colour1 != 0 || (colour1 == 0 && player1_board[j][i] != 0)) {
-                        window->fillRectangle(j * 20, (i + 3) * 20, 20, 20, colour1);
-                        player1_board[j][i] = row1[j];
-                    }
+                    // if (colour1 != 0) {
+                    //     window->fillRectangle(j * 20, (i + 3) * 20, 20, 20, colour1);
+                    //     player1_board[j][i] = row1[j];
+                    // }
+                    window->fillRectangle(j * 20, (i + 4) * 20, 20, 20, colour1);
+                    player1_board[j][i] = row1[j];
                 }
-                if (player2_board[j][i] != row2[j] && (turnAcc % 2 != 0 || turnAcc == 0)) {
+                if (player2_board[j][i] != row2[j] /*&& (turnAcc % 2 != 0 || turnAcc == 0)*/) {
                     // check character for player 2 and display
                     colour2 = CHAR_TO_COLOUR[row2[j]];
-                    if (colour2 != 0 || (colour2 == 0 && player2_board[j][i] != 0)) {
-                        window->fillRectangle((j + 21) * 20, (i + 3) * 20, 20, 20, colour2);
+                    // if (colour2 != 0) {
+                    //     window->fillRectangle((j + 21) * 20, (i + 3) * 20, 20, 20, colour2);
+                    //     player2_board[j][i] = row2[j];
+                    // }
+                    window->fillRectangle((j + 21) * 20, (i + 4) * 20, 20, 20, colour2);
                         player2_board[j][i] = row2[j];
-                    }
                 }
             }
         }
@@ -208,19 +216,19 @@ void Game::render() {
         int colour1_shape = 0;
         int colour2_shape = 0;
         // render next shape
-        window->drawString(0 * 20, (GAME_NUM_ROW + 4) * 20, "Next:");
-        window->drawString(21 * 20, (GAME_NUM_ROW + 4) * 20, "Next:");
+        window->drawString(0 * 20, (GAME_NUM_ROW + 5) * 20, "Next:");
+        window->drawString(21 * 20, (GAME_NUM_ROW + 5) * 20, "Next:");
         for (int i = 0; i < SHAPE_GRID_NUM_ROW; ++i) {
             std::string shape_row1 = player1.renderRowShape(i);
             std::string shape_row2 = player2.renderRowShape(i);
             for (int j = 0; j < SHAPE_GRID_NUM_COL; ++j) {
                 // check character for player 1 and display
                 colour1_shape = CHAR_TO_COLOUR[shape_row1[j]];
-                window->fillRectangle(j * 20, (i + GAME_NUM_ROW + 5) * 20, 20, 20, colour1_shape);
+                window->fillRectangle(j * 20, (i + GAME_NUM_ROW + 6) * 20, 20, 20, colour1_shape);
 
                 // check character for player 2 and display
                 colour2_shape = CHAR_TO_COLOUR[shape_row2[j]];
-                window->fillRectangle((j + 21) * 20, (i + GAME_NUM_ROW + 5) * 20, 20, 20, colour2_shape);
+                window->fillRectangle((j + 21) * 20, (i + GAME_NUM_ROW + 6) * 20, 20, 20, colour2_shape);
             }
         }
     }

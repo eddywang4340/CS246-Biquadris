@@ -7,7 +7,7 @@ using namespace std;
 
 Player::Player(int level): 
     studio{}, totalRowsCleared{0}, highScore{0},
-    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{true}, file{}, shape{nullptr}, nextShape{nullptr}, shadowShape{nullptr}
+    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{true}, file{}, shape{nullptr}, nextShape{nullptr}, shadowShape(nullptr)
 {
     // Initialize level based on parameter
     if(level == 0) { 
@@ -125,7 +125,6 @@ void Player::generateShadow() {
     delete shadowShape;
     
     shadowShape = new Shape(*shape);
-    cout << shadowShape << endl;
     int dropDistance = calculateDropDistance();
     if (dropDistance > 0) {
         shadowShape->move(0, dropDistance);
@@ -232,6 +231,7 @@ void Player::updateTurn(string cmd) { // tested
 			Shape* cur = shape, *next = nextShape;
 			shape = rand; dropBlock();
 			shape = cur; nextShape = next;
+            generateShadow();
 		}
 	}
 }
