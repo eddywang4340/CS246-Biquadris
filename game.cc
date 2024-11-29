@@ -6,7 +6,7 @@
 #include <iomanip>
 
 Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file, bool isGraphics):
-    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}, gameProps{"gameProps.txt"}
+    player1(player1_lvl), player2(player2_lvl), turnAcc{0}, isGraphics{isGraphics}, gameProps{"gameProps.txt"}
 { 
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         // populate a blank row
@@ -59,8 +59,6 @@ void Game::update() {
             else { cout << winner << endl; }
 
             if (command == "restart") {
-                // restart game
-				cout << "placemarker" << endl;
                 restart();
             }
 
@@ -112,6 +110,11 @@ void Game::update() {
 				}
 			}
 
+			if (player1.getLost()) {
+				cout << "Player 2 won" << endl;
+				restart();
+			}
+
         } else {
 			int prev = player2.getRowsCleared();
 
@@ -153,6 +156,11 @@ void Game::update() {
 						render();
 					}
 				}
+			}
+
+			if (player2.getLost()) {
+				cout << "Player 1 won" << endl;
+				restart();
 			}
         }
     }
@@ -219,26 +227,26 @@ void Game::render() {
 
     // render in text format
     // each player's level
-    std::cout << "Level:" << setw(5) << setfill(' ') << right << player1.getLevel() << "     ";
-    std::cout << "Level:" << setw(5) << setfill(' ') << right << player2.getLevel() << std::endl;
+    std::cout << "Level:" << setw(7) << setfill(' ') << right << player1.getLevel() << "    ";
+    std::cout << "Level:" << setw(7) << setfill(' ') << right << player2.getLevel() << std::endl;
 
     // each player's score
-    std::cout << "Score:" << setw(5) << setfill(' ') << right << player1.getScore() << "     ";
-    std::cout << "Score:" << setw(5) << setfill(' ') << right << player2.getScore() << std::endl;
+    std::cout << "Score:" << setw(7) << setfill(' ') << right << player1.getScore() << "    ";
+    std::cout << "Score:" << setw(7) << setfill(' ') << right << player2.getScore() << std::endl;
 
     // highscore
     int highscore = max(player1.getHighScore(), player2.getHighScore());
     gameProps.setProp("highscore", to_string(highscore));
-    std::cout << "Highscore:" << setw(5) << setfill(' ') << right << highscore << " ";
-    std::cout << "Highscore:" << setw(5) << setfill(' ') << right << highscore << std::endl;
+    std::cout << "Highscore:" << setw(3) << setfill(' ') << right << highscore << "    ";
+    std::cout << "Highscore:" << setw(3) << setfill(' ') << right << highscore << std::endl;
 
     // separator
-    std::cout << "-----------     -----------" << std::endl;
+    std::cout << "-----------      -----------" << std::endl;
 
     // render row by row
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         std::cout << player1.renderRow(i);
-        std::cout << "     ";
+        std::cout << "      ";
         std::cout << player2.renderRow(i);
         std::cout << std::endl;
     }
@@ -278,6 +286,8 @@ void Game::restart() {
         delete window;
         initializeGraphics();
     }
+
+	render();
 }
 
 void Game::initializeGraphics() {

@@ -26,7 +26,8 @@ GameProperties::GameProperties(string file) : file{file} {
         {"down", "down"},
         {"drop", "drop"},
         {"clockwise", "clockwise"},
-        {"counterclockwise", "counterclockwise"}
+        {"counterclockwise", "counterclockwise"},
+		{"restart", "restart"}
     };
     if(file != "") loadFile(file);
 }
