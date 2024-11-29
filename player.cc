@@ -60,6 +60,8 @@ void Player::setNextLevel() { //tested
             lvl = newLevel;
         }
     }
+
+	cout << "You are now " << lvl->getLevel() << endl;
 }
 
 void Player::setDownLevel() { //tested
@@ -79,6 +81,8 @@ void Player::setDownLevel() { //tested
             lvl = newLevel;
         }
     }
+	cout << "You are now Level " << lvl->getLevel() << endl;
+	cout << "-----------" << endl;
 }
 
 void Player::resetBoard() {

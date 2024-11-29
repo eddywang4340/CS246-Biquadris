@@ -27,7 +27,12 @@ GameProperties::GameProperties(string file) : file{file} {
         {"drop", "drop"},
         {"clockwise", "clockwise"},
         {"counterclockwise", "counterclockwise"},
-		{"restart", "restart"}
+		{"restart", "restart"},
+		{"leveldown", "leveldown"},
+		{"levelup", "levelup"},
+		{"random", "random"},
+		{"norandom", "norandom"},
+		{"sequence", "sequence"}
     };
     if(file != "") loadFile(file);
 }
