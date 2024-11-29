@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
         }
 
         if (arg == "-scriptfile2") {
-            f1 = argv[i+1];
+            f2 = argv[i+1];
         }
     }
 
@@ -47,31 +47,11 @@ int main(int argc, char *argv[]) {
     cout << "File 2: " << f2 << endl;
     cout << "Level: " << level << endl;
 
-    srand(seed); // KEEP THIS
+    srand(seed);
     Game g(level, level, f1, f2, graphics);
     string cmd;
 
     cout << "----" << endl;
-
-    // for (int i = 0; i < 18; ++i) {
-    //         cout << p1.renderRow(i);
-    //         cout << endl;
-    //     }
-    
-    // while (cin >> cmd) {
-    //     p1.updateTurn(cmd);
-
-    //     // for (int i = 0; i < 18; ++i) {
-    //     //     cout << p1.renderRow(i);
-    //     //     cout << endl;
-    //     // }
-
-    //     g.render();
-
-    //     // cout << "----" << endl;
-    //     // cout << p1.getScore() << endl;
-    //     // cout << "----" << endl;
-    // }
 
     g.update();
 }
