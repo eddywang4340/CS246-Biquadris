@@ -35,7 +35,7 @@ string GameProperties::getProp(string prop) {
     return "no cmd";
 }
 
-string GameProperties::setProp(string prop, string value) {
+void GameProperties::setProp(string prop, string value) {
     properties[prop] = value;
 }
 

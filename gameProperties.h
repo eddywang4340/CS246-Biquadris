@@ -14,7 +14,7 @@ class GameProperties {
 public:
     GameProperties(string file = "");
     string getProp(string prop);
-    string setProp(string prop, string value);
+    void setProp(string prop, string value);
 
     void loadFile(string file);
     void saveFile();
