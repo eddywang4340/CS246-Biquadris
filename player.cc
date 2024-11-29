@@ -5,17 +5,17 @@
 
 using namespace std;
 
-Player::Player(int level): 
+Player::Player(int level, string file): 
     studio{}, totalRowsCleared{0}, highScore{0},
-    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{true}, file{}, shape{nullptr}, nextShape{nullptr}, shadowShape(nullptr)
+    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{true}, filestream{file}, shape{nullptr}, nextShape{nullptr}, shadowShape(nullptr)
 {
     // Initialize level based on parameter
     if(level == 0) { 
 		lvl = new LevelZero(); 
-		cout << "Please input a file URL: " << endl;
-		string str;
-		cin >> str;	
-		file.open(str);
+		// cout << "Please input a file URL: " << endl;
+		// string str;
+		// cin >> str;	
+		// file.open(str);
 		isRand = false;
 	}
     else if(level == 1) { lvl = new LevelOne(); }
@@ -25,10 +25,10 @@ Player::Player(int level):
 
 	char c; 
 	
-	if (level == 0 && file.is_open()) {
-		if (file.get(c)) setShape(c);
+	if (level == 0 && filestream.is_open()) {
+		if (filestream.get(c)) setShape(c);
 		else { shape = lvl->getRand(); }
-		if (file.get(c)) setNextShape(c);
+		if (filestream.get(c)) setNextShape(c);
 		else { nextShape = lvl->getRand(); }
 	} else {
 		shape = lvl->getRand();
@@ -102,10 +102,10 @@ void Player::resetBoard() {
 
 	char c;
 
-    if (lvl->getLevel() == 0 && file.is_open()) {
-		if (file.get(c)) setShape(c);
+    if (lvl->getLevel() == 0 && filestream.is_open()) {
+		if (filestream.get(c)) setShape(c);
 		else { shape = lvl->getRand(); }
-		if (file.get(c)) setNextShape(c);
+		if (filestream.get(c)) setNextShape(c);
 		else { nextShape = lvl->getRand(); }
 	} else {
 		shape = lvl->getRand();
@@ -176,7 +176,7 @@ void Player::updateTurn(string cmd) { // tested
         if (isRand || lvl->getLevel() == 0) {
 			char c;
 			
-			if (file.get(c)) setNextShape(c);
+			if (filestream.get(c)) setNextShape(c);
 			else { nextShape = lvl->getRand();  }
 		} else {
         	nextShape = lvl->getRand(); 
@@ -189,12 +189,12 @@ void Player::updateTurn(string cmd) { // tested
 		isRand = false;
 		string str;
 		cin >> str;
-		file.open(str);
+		filestream.open(str);
 		char c;
 
-		if (file.get(c)) { setShape(c); }
+		if (filestream.get(c)) { setShape(c); }
 		else { shape = lvl->getRand(); }
-		if (file.get(c)) { setNextShape(c); }
+		if (filestream.get(c)) { setNextShape(c); }
 		else { nextShape = lvl->getRand(); }
         generateShadow();
 	}
@@ -274,7 +274,7 @@ void Player::dropBlock() { // tested
     shadowShape = nullptr;
 	shape = nextShape;
 	char c;
-	if ((lvl->getLevel() == 0 || !(isRand)) && file.is_open() && file.get(c)) {
+	if ((lvl->getLevel() == 0 || !(isRand)) && filestream.is_open() && filestream.get(c)) {
 		nextShape = nullptr;
 		setNextShape(c);
 	} else {

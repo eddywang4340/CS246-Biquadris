@@ -14,7 +14,7 @@ class Player {
     Shape* shape;
     Shape* nextShape;
     Shape* shadowShape;
-	ifstream file;
+	ifstream filestream;
     
     int totalRowsCleared;
     int highScore;
@@ -26,7 +26,7 @@ class Player {
     int calculateDropDistance();
 
 public:
-    Player(int lvl = 0);
+    Player(int lvl = 0, string file = "");
     ~Player();
 
     void updateTurn(std::string cmd);
