@@ -6,7 +6,7 @@
 #include <iomanip>
 
 Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file, bool isGraphics):
-    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}
+    player1{player1_lvl}, player2{player2_lvl}, turnAcc{0}, isGraphics{isGraphics}
 { 
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         // populate a blank row
@@ -21,7 +21,7 @@ Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::stri
 	render();
 }
 
-Game::~Game() { delete window; }
+Game::~Game() { if (window) delete window; }
 
 std::string Game::getWinner() {
     // Checks to see which player lost
@@ -52,70 +52,103 @@ void Game::update() {
             std::string winner = getWinner();
             if (winner != "Tie") std::cout << winner << " has won!" << std::endl;
             else { cout << winner << endl; }
+
             if (command == "restart") {
                 // restart game
+				cout << "placemarker" << endl;
                 restart();
             }
-            break;
+
+			if (std::cin.eof()) break;
         }
 
         // Checking which player's turn it is
         if (turnAcc % 2 == 0) {
 			int prev = player1.getRowsCleared();
-			player1.updateTurn(command);
 
-            if (command == "drop") turnAcc++;
+			if (command == "sequence") {
+				string file;
+				cin >> file;
+				ifstream f{file};
+				string cmd;
 
-			render();
-
-            // Signals end of turn
-            if (command == "drop") {
-				if (player1.getRowsCleared() - prev >= 2) {
-					cout << "Player 1 gets a powerup! Would you like to apply heavy, force or blind?" << endl;
-					string cmd;
-					cin >> cmd;
-
-					if (cmd == "heavy") player2.setHeavy();
-					else if (cmd == "force") {
-						cout << "What shape do you want the opponent to have next? (I, J, L, O, S, Z, T)" << endl;
-						char shape;
-						cin >> shape;
-						player2.setShape(shape);
-						
-					}
-					else { player2.setBlind(); }
+				while (getline(f, cmd)) {
+					cout << cmd << endl;
+					player1.updateTurn(cmd);
+					if (cmd == "drop") turnAcc++;
 					render();
 				}
-            }
+
+			} else {
+				player1.updateTurn(command);
+
+				if (command == "drop") turnAcc++;
+
+				render();
+
+				// Signals end of turn
+				if (command == "drop") {
+					if (player1.getRowsCleared() - prev >= 2) {
+						cout << "Player 1 gets a powerup! Would you like to apply heavy, force or blind?" << endl;
+						string cmd;
+						cin >> cmd;
+
+						if (cmd == "heavy") player2.setHeavy();
+						else if (cmd == "force") {
+							cout << "What shape do you want the opponent to have next? (I, J, L, O, S, Z, T)" << endl;
+							char shape;
+							cin >> shape;
+							player2.setShape(shape);
+							
+						}
+						else { player2.setBlind(); }
+						render();
+					}
+				}
+			}
 
         } else {
 			int prev = player2.getRowsCleared();
-			player2.updateTurn(command);
 
-            if (command == "drop") turnAcc++;
+			if (command == "sequence") {
+				string file;
+				cin >> file;
+				ifstream f{file};
+				string cmd;
 
-			render();
-
-             // Signals end of turn
-            if (command == "drop") {
-				if (player2.getRowsCleared() - prev >= 2) {
-					cout << "Player 2 gets a powerup! Would you like to apply heavy, force or blind?" << endl;
-					string cmd;
-					cin >> cmd;
-
-					if (cmd == "heavy") player1.setHeavy();
-					else if (cmd == "force") {
-						cout << "What shape do you want the opponent to have next? (I, J, L, O, S, Z, T)" << endl;
-						char shape;
-						cin >> shape;
-						player1.setShape(shape);
-					}
-					else { player1.setBlind(); }
+				while (getline(f, cmd)) {
+					cout << cmd << endl;
+					player2.updateTurn(cmd);
+					if (cmd == "drop") turnAcc++;
 					render();
 				}
-                turnAcc++;
-            }
-			
+
+			} else {
+				player2.updateTurn(command);
+
+				if (command == "drop") turnAcc++;
+
+				render();
+
+				// Signals end of turn
+				if (command == "drop") {
+					if (player2.getRowsCleared() - prev >= 2) {
+						cout << "Player 2 gets a powerup! Would you like to apply heavy, force or blind?" << endl;
+						string cmd;
+						cin >> cmd;
+
+						if (cmd == "heavy") player1.setHeavy();
+						else if (cmd == "force") {
+							cout << "What shape do you want the opponent to have next? (I, J, L, O, S, Z, T)" << endl;
+							char shape;
+							cin >> shape;
+							player1.setShape(shape);
+						}
+						else { player1.setBlind(); }
+						render();
+					}
+				}
+			}
         }
     }
 }

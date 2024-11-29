@@ -13,6 +13,7 @@ class Player {
     Studio studio;
     Shape* shape;
     Shape* nextShape;
+	ifstream file;
     
     int totalRowsCleared;
     int highScore;
@@ -21,7 +22,7 @@ class Player {
     void handleMovement(int moveCol, int moveRow);
 
 public:
-    Player(int lvl = 0, std::string file = "");
+    Player(int lvl = 0);
     ~Player();
 
     void updateTurn(std::string cmd);
@@ -41,6 +42,7 @@ public:
     void setBlind() { isBlind = true; }
     void setHeavy() { isHeavy = true; }
     void setShape(char c);
+	void setNextShape(char c);
     
     void setNextLevel();
 	void setDownLevel();
