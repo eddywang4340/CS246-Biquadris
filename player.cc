@@ -1,22 +1,39 @@
 #include "player.h"
 #include "shape.h"
+#include <string>
+#include <sstream>
 
 using namespace std;
 
-Player::Player(int level, std::string file): 
+Player::Player(int level): 
     studio{}, totalRowsCleared{0}, highScore{0},
-    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{file.length() == 0}, shadowShape{nullptr}
+    lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{true}, file{}, shape{nullptr}, nextShape{nullptr}, shadowShape(nullptr)
 {
     // Initialize level based on parameter
-    if(level == 0) { lvl = new LevelOne(); } /// no level 0
+    if(level == 0) { 
+		lvl = new LevelZero(); 
+		cout << "Please input a file URL: " << endl;
+		string str;
+		cin >> str;	
+		file.open(str);
+		isRand = false;
+	}
     else if(level == 1) { lvl = new LevelOne(); }
     else if(level == 2) { lvl = new LevelTwo(); }
-    else if(level == 3) { lvl = new LevelThree(file); }
-    else { lvl = new LevelFour(file); }
+    else if(level == 3) { lvl = new LevelThree(); }
+    else { lvl = new LevelFour(); }
+
+	char c; 
 	
-	shape = lvl->getRand();
-	nextShape = lvl->getRand();
-    shadowShape = nullptr;
+	if (level == 0 && file.is_open()) {
+		if (file.get(c)) setShape(c);
+		else { shape = lvl->getRand(); }
+		if (file.get(c)) setNextShape(c);
+		else { nextShape = lvl->getRand(); }
+	} else {
+		shape = lvl->getRand();
+		nextShape = lvl->getRand();
+	}
 }
 
 Player::~Player() {
@@ -34,8 +51,8 @@ void Player::setNextLevel() { //tested
         switch(currentLevel + 1) {
             case 1: newLevel = new LevelOne(); break;
             case 2: newLevel = new LevelTwo(); break;
-            case 3: newLevel = new LevelThree(""); break;
-            case 4: newLevel = new LevelFour(""); break;
+            case 3: newLevel = new LevelThree(); break;
+            case 4: newLevel = new LevelFour(); break;
         }
         
         if(newLevel) {
@@ -51,10 +68,10 @@ void Player::setDownLevel() { //tested
     
     if(currentLevel > 0) {
         switch(currentLevel - 1) {
-			case 0: newLevel = new LevelOne(); break;
+			case 0: newLevel = new LevelZero(); break;
             case 1: newLevel = new LevelOne(); break;
             case 2: newLevel = new LevelTwo(); break;
-            case 3: newLevel = new LevelThree(""); break;
+            case 3: newLevel = new LevelThree(); break;
         }
         
         if(newLevel) {
@@ -71,11 +88,22 @@ void Player::resetBoard() {
     isBlind = false;
     isHeavy = false;
     isForce = false;
+	isRand = false;
     
-    delete shape;
-    delete nextShape;
-    shape = nullptr;
-    nextShape = lvl->getRand();
+    if (shape) delete shape;
+    if (nextShape) delete nextShape;
+
+	char c;
+
+    if (lvl->getLevel() == 0 && file.is_open()) {
+		if (file.get(c)) setShape(c);
+		else { shape = lvl->getRand(); }
+		if (file.get(c)) setNextShape(c);
+		else { nextShape = lvl->getRand(); }
+	} else {
+		shape = lvl->getRand();
+		nextShape = lvl->getRand();
+	}
 }
 
 void Player::handleMovement(int moveCol, int moveRow) {
@@ -134,8 +162,34 @@ int Player::calculateDropDistance() {
 }
 
 void Player::updateTurn(string cmd) { // tested
-    if(shape == nullptr) shape = nextShape;
-    
+    if(shape == nullptr) {
+		cout << "Shape is null" << endl;
+		shape = nextShape;
+        if (isRand || lvl->getLevel() == 0) {
+			char c;
+			
+			if (file.get(c)) setNextShape(c);
+			else { nextShape = lvl->getRand();  }
+		} else {
+        	nextShape = lvl->getRand(); 
+		}
+    }
+
+	// random commands
+	if (cmd == "random") isRand = true;
+	else if (cmd == "norandom" && (lvl->getLevel() == 3 || lvl->getLevel() == 4)) {
+		isRand = false;
+		string str;
+		cin >> str;
+		file.open(str);
+		char c;
+
+		if (file.get(c)) { setShape(c); cout << c << endl;}
+		else { shape = lvl->getRand(); }
+		if (file.get(c)) { setNextShape(c); cout << c << endl; }
+		else { nextShape = lvl->getRand(); }
+	}
+
     //Level commands
     if(cmd == "levelup") {
         setNextLevel();
@@ -184,6 +238,7 @@ void Player::updateTurn(string cmd) { // tested
 
 void Player::dropBlock() { // tested
 	lvl->setTime(0);
+
     while(canMove(1, 0)) {
         shape->move(0, 1);
     }
@@ -205,11 +260,17 @@ void Player::dropBlock() { // tested
     
     studio.setBoard(board);
     
-    delete shape;
+	delete shape;
     delete shadowShape;
     shadowShape = nullptr;
-    shape = nextShape;
-	nextShape = lvl->getRand();
+	shape = nextShape;
+	char c;
+	if ((lvl->getLevel() == 0 || !(isRand)) && file.is_open() && file.get(c)) {
+		nextShape = nullptr;
+		setNextShape(c);
+	} else {
+		nextShape = lvl->getRand();
+	} 
     
     while(studio.canRemove() != -1) {
         studio.removeRow();
@@ -298,9 +359,11 @@ std::string Player::renderRowShape(int n) const { // tested
 }
 
 void Player::setShape(char c) {
-	delete shape;
+	if (shape) {
+		delete shape; 
     delete shadowShape;
     shadowShape = nullptr;
+	}
 	
 	switch(c) {
 		case 'I': {
@@ -335,6 +398,59 @@ void Player::setShape(char c) {
 
 		case 'T': {
 			shape = new TShape();
+			break;
+		}
+
+		default: {
+			shape = lvl->getRand();
+			break;
+		}
+	}
+}
+
+void Player::setNextShape(char c) {
+	if (nextShape) {
+		delete nextShape;
+	}
+
+	switch(c) {
+		case 'I': {
+			nextShape = new IShape();
+			break;
+		}
+
+		case 'J': {
+			nextShape = new JShape();
+			break;
+		}
+
+		case 'L': {
+			nextShape = new LShape();
+			break;
+		}
+
+		case 'O': {
+			nextShape = new OShape();
+			break;
+		}
+
+		case 'S': {
+			nextShape = new SShape();
+			break;
+		}
+
+		case 'Z': {
+			nextShape = new ZShape();
+			break;
+		}
+
+		case 'T': {
+			nextShape = new TShape();
+			break;
+		}
+
+		default: {
+			nextShape = lvl->getRand();
 			break;
 		}
 	}

@@ -14,11 +14,13 @@ using namespace std;
 int main() {
 	srand(time(0)); // KEEP THIS
 	int l1, l2;
+	string f1, f2;
 	cout << "Player 1, choose your level: (0-4)" << endl;
 	cin >> l1;
 	cout << "Player 2, choose your level: (0-4)" << endl;
 	cin >> l2;
-	Game g = Game(l1, l2, "", "", true);
+
+	Game g(l1, l2, "", "", false);
 	string cmd;
 
 	cout << "----" << endl;

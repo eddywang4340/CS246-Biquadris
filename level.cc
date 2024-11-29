@@ -64,6 +64,16 @@ Shape* Level::getBlock(char block) {
 	}
 }
 
+LevelZero::LevelZero(): Level(0) {
+	probability.insert(probability.end(), {'S', 'Z', 'L', 'L', 'I', 'I', 'J', 'J', 'O', 'O', 'T', 'T'});
+}
+
+Shape* LevelZero::getRand() {
+	int idx = rand() % 12;
+	char block = probability[idx];
+	return getBlock(block);
+}
+
 LevelOne::LevelOne(): Level(1) {
 	probability.insert(probability.end(), {'S', 'Z', 'L', 'L', 'I', 'I', 'J', 'J', 'O', 'O', 'T', 'T'});
 }
@@ -84,7 +94,7 @@ Shape* LevelTwo::getRand() {
 	return getBlock(block);
 }
 
-LevelThree::LevelThree(string file): Level(3), cmds(file) {
+LevelThree::LevelThree(): Level(3) {
 	probability.insert(probability.end(), {'S', 'S', 'Z', 'Z', 'I', 'J', 'O', 'L', 'T'});
 }
 
@@ -94,11 +104,7 @@ Shape* LevelThree::getRand() {
 	return getBlock(block);
 } 
 
-Shape* LevelThree::getNotRand() {
-	cout << "No get random :)" << endl;
-}
-
-LevelFour::LevelFour(string file): Level(4), cmds(file) {
+LevelFour::LevelFour(): Level(4) {
 	probability.insert(probability.end(), {'S', 'S', 'Z', 'Z', 'I', 'J', 'O', 'L', 'T'});
 }
 
@@ -118,8 +124,4 @@ int LevelFour::dropRandBlock() {
 	}
 
 	return -1;
-}
-
-Shape* LevelFour::getNotRand() {
-	cout << "No get random :)" << endl;
 }
