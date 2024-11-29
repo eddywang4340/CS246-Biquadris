@@ -32,6 +32,10 @@ GameProperties::GameProperties(string file) : file{file} {
     if(file != "") loadFile(file);
 }
 
+GameProperties::~GameProperties() {
+    saveFile();
+}
+
 string GameProperties::getProp(string prop) {
     if(properties.contains(prop)) return properties[prop];
     return "no cmd";

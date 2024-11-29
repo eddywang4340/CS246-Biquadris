@@ -13,6 +13,7 @@ class GameProperties {
 
 public:
     GameProperties(string file = "");
+    ~GameProperties();
     string getProp(string prop);
     void setProp(string prop, string value);
 
