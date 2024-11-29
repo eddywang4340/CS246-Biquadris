@@ -1,4 +1,3 @@
-#include "GameProperties.h"
 #include "gameProperties.h"
 
 void GameProperties::loadFile(string file) {

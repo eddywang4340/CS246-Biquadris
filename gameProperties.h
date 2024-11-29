@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAMEPROP_H
+#define GAMEPROP_H
 
 #include <map>
 #include <string>
@@ -16,7 +16,7 @@ public:
     string getProp(string prop);
     string setProp(string prop, string value);
 
-    void loadFile(string file) { this->file = file; }
+    void loadFile(string file);
     void saveFile();
 };
 
