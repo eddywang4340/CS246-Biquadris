@@ -2,11 +2,12 @@
 #include "shape.h"
 #include <string>
 #include <sstream>
+#include <cctype>
 
 using namespace std;
 
 Player::Player(int level, string file): 
-    studio{}, totalRowsCleared{0}, highScore{0},
+    studio{}, totalRowsCleared{0}, highScore{0}, dropNum{0},
     lost{false}, isBlind{false}, isHeavy{false}, isForce{false}, isRand{true}, filestream{file}, shape{nullptr}, nextShape{nullptr}, shadowShape(nullptr)
 {
     // Initialize level based on parameter
@@ -169,7 +170,7 @@ int Player::calculateDropDistance() {
     return distance;
 }
 
-void Player::updateTurn(string cmd) { // tested
+void Player::updateTurn(string cmd, int multiplier) { // tested
     if(shape == nullptr) {
 		shape = nextShape;
         if (isRand || lvl->getLevel() == 0) {
@@ -206,34 +207,57 @@ void Player::updateTurn(string cmd) { // tested
 
     //Level commands
     if(cmd == "levelup") {
-        setNextLevel();
+        for (int i = 0; i < multiplier; ++i) {
+            setNextLevel();
+        }
         return;
     } else if(cmd == "leveldown") {
-        setDownLevel();
+        for (int i = 0; i < multiplier; ++i) {
+            setDownLevel();
+        }
         return;
     }
 
 	if (cmd == "clockwise") {
-		shape->rotateCW();
+        for (int i = 0; i < multiplier; ++i) {
+            shape->rotateCW();
+        }
         generateShadow();
 	} else if (cmd == "counterclockwise") {
-		shape->rotateCCW();
+        for (int i = 0; i < multiplier; ++i) {
+		    shape->rotateCCW();
+        }
         generateShadow();
 	}
 
     //Movement commands
     int moveRow = 0, moveCol = 0;
     if(cmd == "left") {
-        moveCol = -1; handleMovement(moveCol, moveRow);
+        moveCol = -1;
+        for (int i = 0; i < multiplier; ++i) {
+            handleMovement(moveCol, moveRow);
+        }
     }
     else if(cmd == "right") {
-        moveCol = 1; handleMovement(moveCol, moveRow);
+        moveCol = 1;
+        for (int i = 0; i < multiplier; ++i) {
+            handleMovement(moveCol, moveRow);
+        }
     }
     else if(cmd == "down") {
-        moveRow = 1; handleMovement(moveCol, moveRow);
+        moveRow = 1;
+        for (int i = 0; i < multiplier; ++i) {
+            handleMovement(moveCol, moveRow);
+        }
     }
-    else if(cmd == "drop") dropBlock();
-
+    else if(cmd == "drop") {
+        // different for drop
+        this->dropNum = multiplier - 1;
+        if (multiplier > 0) {
+            // if multiplier is 0 then don't dropBlock
+            dropBlock();
+        }
+    }
 	
 	if (lvl->getLevel() == 4) {
 		int idx = lvl->dropRandBlock();

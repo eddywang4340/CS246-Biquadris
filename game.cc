@@ -48,9 +48,54 @@ std::string Game::getWinner() {
 }
 
 void Game::update() {
+    int multiplier = 1;
     while (true) {
+        if (turnAcc % 2 == 0) cout << "Player 1's turn:" << endl;
+        else {
+            cout << "Player 2's turn:" << endl;
+        }
+        // if player has positive dropNum (don't prompt user for command, just drop)
+
+        // if it is player 1's turn then do this
+        if (turnAcc % 2 == 0) {
+            if (player1.getDropNum() > 0) {
+                // decrement dropNum
+                player1.decrementDropNum();
+                player1.dropBlock();
+                turnAcc++;
+                render();
+                continue;
+            }
+        } else {
+            if (player2.getDropNum() > 0) {
+                // decrement
+                player2.decrementDropNum();
+                player2.dropBlock();
+                turnAcc++;
+                render();
+                continue;
+            }
+        }
+
         std::string command;
         std::cin >> command;
+
+        multiplier = 1;
+        int num_digits = 0;
+        while (isdigit(command[0])) {
+            int digit = command[0] - '0';
+            num_digits++;
+            if (num_digits > 1) {
+                // multi-digit case
+                multiplier *= 10;
+                multiplier += digit;
+            } else {
+                // single digit case
+                multiplier = digit;
+            }
+            // remove the first digit from cmd
+            command.erase(command.begin());
+        }
 
         if(gameProps.getProp(command) != "") {
             command = gameProps.getProp(command);
@@ -81,13 +126,13 @@ void Game::update() {
 
 				while (getline(f, cmd)) {
 					cout << cmd << endl;
-					player1.updateTurn(cmd);
+					player1.updateTurn(cmd, 1);
 					if (cmd == "drop") turnAcc++;
 					render();
 				}
 
 			} else {
-				player1.updateTurn(command);
+                    player1.updateTurn(command, multiplier);
 
 				if (command == "drop") turnAcc++;
 
@@ -130,13 +175,13 @@ void Game::update() {
 
 				while (getline(f, cmd)) {
 					cout << cmd << endl;
-					player2.updateTurn(cmd);
+					player2.updateTurn(cmd, 1);
 					if (cmd == "drop") turnAcc++;
 					render();
 				}
 
 			} else {
-				player2.updateTurn(command);
+				player2.updateTurn(command, multiplier);
 
 				if (command == "drop") turnAcc++;
 
@@ -285,10 +330,10 @@ void Game::render() {
         std::cout << std::endl;
     }
 
-    if (turnAcc % 2 == 0) cout << "Player 1's turn:" << endl;
-    else {
-        cout << "Player 2's turn:" << endl;
-    }
+    // if (turnAcc % 2 == 0) cout << "Player 1's turn:" << endl;
+    // else {
+    //     cout << "Player 2's turn:" << endl;
+    // }
 }
 
 void Game::restart() {

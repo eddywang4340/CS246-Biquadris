@@ -18,6 +18,7 @@ class Player {
     
     int totalRowsCleared;
     int highScore;
+    int dropNum;
     bool lost, isBlind, isHeavy, isForce, isRand;
 
     void handleMovement(int moveCol, int moveRow);
@@ -29,7 +30,7 @@ public:
     Player(int lvl = 0, string file = "");
     ~Player();
 
-    void updateTurn(std::string cmd);
+    void updateTurn(std::string cmd, int multiplier);
     std::string renderRow(int n);
     std::string renderRowShape(int n) const;
     bool canMove(int r, int c);
@@ -40,6 +41,7 @@ public:
     int getScore() const { return (lvl->getLevel() + totalRowsCleared)*(lvl->getLevel() + totalRowsCleared); }
     int getLevel() const { return lvl->getLevel(); }
     int getHighScore();
+    int getDropNum() { return dropNum; }
     bool getLost() const { return lost; }
     void setLost() { lost = true; }
 
@@ -47,6 +49,7 @@ public:
     void setHeavy() { isHeavy = true; }
     void setShape(char c);
 	void setNextShape(char c);
+    void decrementDropNum() { dropNum--; }
     
     void setNextLevel();
 	void setDownLevel();
