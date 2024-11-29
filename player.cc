@@ -16,6 +16,7 @@ Player::Player(int level, std::string file):
 	
 	shape = lvl->getRand();
 	nextShape = lvl->getRand();
+    shadowShape = nullptr;
 }
 
 Player::~Player() {
@@ -96,6 +97,7 @@ void Player::generateShadow() {
     delete shadowShape;
     
     shadowShape = new Shape(*shape);
+    cout << shadowShape << endl;
     int dropDistance = calculateDropDistance();
     if (dropDistance > 0) {
         shadowShape->move(0, dropDistance);
@@ -146,8 +148,10 @@ void Player::updateTurn(string cmd) { // tested
 
 	if (cmd == "clockwise") {
 		shape->rotateCW();
+        generateShadow();
 	} else if (cmd == "counterclockwise") {
 		shape->rotateCCW();
+        generateShadow();
 	}
 
     //Movement commands
@@ -202,6 +206,8 @@ void Player::dropBlock() { // tested
     studio.setBoard(board);
     
     delete shape;
+    delete shadowShape;
+    shadowShape = nullptr;
     shape = nextShape;
 	nextShape = lvl->getRand();
     
@@ -264,10 +270,12 @@ std::string Player::renderRow(int n) { // tested
                 continue;
             }
         }
-        else if(shadowShape && n >= shadowShape->getT() && n < shadowShape->getT() + shadowShape->getHeight() && i >= shadowShape->getL() && i < shadowShape->getL() + shadowShape->getWidth()) {
-            char shadowChar = '#';
-            row_str += '#';
-            continue;
+        else if((shadowShape != nullptr) && (n >= shadowShape->getT()) && (n < shadowShape->getT() + shadowShape->getHeight()) && (i >= shadowShape->getL()) && (i < shadowShape->getL() + shadowShape->getWidth())) {
+            char shapeChar = shadowShape->charAt(i - shadowShape->getL(), n - shadowShape->getT());
+            if(shapeChar != ' ') {
+                row_str += '#';
+                continue;
+            }
         }
         row_str += studio.charAt(i, n);
     }
@@ -291,6 +299,8 @@ std::string Player::renderRowShape(int n) const { // tested
 
 void Player::setShape(char c) {
 	delete shape;
+    delete shadowShape;
+    shadowShape = nullptr;
 	
 	switch(c) {
 		case 'I': {

@@ -13,7 +13,6 @@ void GameProperties::loadFile(string file) {
 }
 
 GameProperties::GameProperties(string file) : file{file} {
-    cout << file << endl;
     properties = {
         {"l", "left"},
         {"r", "right"},

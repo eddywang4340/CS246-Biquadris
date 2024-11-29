@@ -124,7 +124,6 @@ void Game::update() {
 					else { player1.setBlind(); }
 					render();
 				}
-                turnAcc++;
             }
 			
         }
@@ -151,19 +150,21 @@ void Game::render() {
             std::string row2 = player2.renderRow(i);
             for (int j = 0; j < GAME_NUM_COL; ++j) {
                 // logic: only render the board if it is different then previous
-                if (player1_board[j][i] != row1[j]) {
+                if (player1_board[j][i] != row1[j] && ((turnAcc & 2 == 0) || turnAcc == 0)) {
                     // check character for player 1 and display
                     colour1 = CHAR_TO_COLOUR[row1[j]];
-                    // window->getPixelColour(j * 20, (i + 3) * 20);
-                    window->fillRectangle(j * 20, (i + 3) * 20, 20, 20, colour1);
-                    player1_board[j][i] = row1[j];
+                    if (colour1 != 0 || (colour1 == 0 && player1_board[j][i] != 0)) {
+                        window->fillRectangle(j * 20, (i + 3) * 20, 20, 20, colour1);
+                        player1_board[j][i] = row1[j];
+                    }
                 }
-                if (player2_board[j][i] != row2[j]) {
+                if (player2_board[j][i] != row2[j] && (turnAcc % 2 != 0 || turnAcc == 0)) {
                     // check character for player 2 and display
                     colour2 = CHAR_TO_COLOUR[row2[j]];
-                    window->fillRectangle((j + 21) * 20, (i + 3) * 20, 20, 20, colour2);
-                    // window->getPixelColour(j * 20, (i + 3) * 20);
-                    player2_board[j][i] = row2[j];
+                    if (colour2 != 0 || (colour2 == 0 && player2_board[j][i] != 0)) {
+                        window->fillRectangle((j + 21) * 20, (i + 3) * 20, 20, 20, colour2);
+                        player2_board[j][i] = row2[j];
+                    }
                 }
             }
         }

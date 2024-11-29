@@ -21,7 +21,6 @@ class Player {
 
     void handleMovement(int moveCol, int moveRow);
     
-    Shape* shadowShape;
     void generateShadow();
     int calculateDropDistance();
 

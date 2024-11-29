@@ -14,4 +14,6 @@ std::map<char, int> CHAR_TO_COLOUR = {{'L', Xwindow::Black},
                                             {'Z', Xwindow::Yellow},
                                             {'T', Xwindow::Purple},
                                             {'*', Xwindow::Brown},
-                                            {' ', Xwindow::White}};
+                                            {' ', Xwindow::White},
+                                            {'#', Xwindow::Grey},
+                                            {'?', Xwindow::BlueViolet}};
