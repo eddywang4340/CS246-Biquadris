@@ -6,7 +6,7 @@
 #include <iomanip>
 
 Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file, bool isGraphics):
-    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}, gameProps{}
+    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}, gameProps{"gameProps.txt"}
 { 
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         // populate a blank row
@@ -54,8 +54,10 @@ void Game::update() {
         std::string command;
         std::cin >> command;
 
-        if(gameProps.getProp(command) != "") command = gameProps.getProp(command) != "";
-        
+        if(gameProps.getProp(command) != "") {
+            command = gameProps.getProp(command);
+        }
+
         if (std::cin.eof() || command == "restart") {
             // reached end of file or restart, end the game
             std::string winner = getWinner();

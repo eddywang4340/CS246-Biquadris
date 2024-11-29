@@ -1,4 +1,5 @@
 #include "gameProperties.h"
+#include <iostream>
 
 void GameProperties::loadFile(string file) {
     this->file = file;
@@ -6,12 +7,13 @@ void GameProperties::loadFile(string file) {
     ifstream fs(this->file); string row;
     while(getline(fs, row)) {
         string key = row.substr(0, row.find(' '));
-        string value = row.substr(row.find(' '));
+        string value = row.substr(row.find(' ') + 1);
         properties[key] = value;
     }
 }
 
 GameProperties::GameProperties(string file) : file{file} {
+    cout << file << endl;
     properties = {
         {"l", "left"},
         {"r", "right"},
