@@ -34,6 +34,7 @@ Player::Player(int level):
 		shape = lvl->getRand();
 		nextShape = lvl->getRand();
 	}
+    generateShadow();
 }
 
 Player::~Player() {
@@ -96,6 +97,8 @@ void Player::resetBoard() {
     
     if (shape) delete shape;
     if (nextShape) delete nextShape;
+    if (shadowShape) delete shadowShape;
+    shadowShape = nullptr;
 
 	char c;
 
@@ -108,6 +111,7 @@ void Player::resetBoard() {
 		shape = lvl->getRand();
 		nextShape = lvl->getRand();
 	}
+    generateShadow();
 }
 
 void Player::handleMovement(int moveCol, int moveRow) {
@@ -188,10 +192,11 @@ void Player::updateTurn(string cmd) { // tested
 		file.open(str);
 		char c;
 
-		if (file.get(c)) { setShape(c); cout << c << endl;}
+		if (file.get(c)) { setShape(c); }
 		else { shape = lvl->getRand(); }
-		if (file.get(c)) { setNextShape(c); cout << c << endl; }
+		if (file.get(c)) { setNextShape(c); }
 		else { nextShape = lvl->getRand(); }
+        generateShadow();
 	}
 
     //Level commands
@@ -284,6 +289,8 @@ void Player::dropBlock() { // tested
 	isHeavy = false;
 	isForce = false;
 	isBlind = false;
+
+    generateShadow();
 }
 
 int Player::getHighScore() {

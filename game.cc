@@ -10,13 +10,17 @@ Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::stri
 { 
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         // populate a blank row
-        std::vector<char> row;
+        std::vector<char> row1;
+        std::vector<char> row2;
         for (int j = 0; j < GAME_NUM_COL; ++j) {
-            row.emplace_back(' ');
+            row1.emplace_back(' ');
+            row2.emplace_back(' ');
         }
-        player1_board.emplace_back(row);
-        player2_board.emplace_back(row);
+        player1_board.emplace_back(row1);
+        player2_board.emplace_back(row2);
     }
+    // cout << player1_board[0].size() << endl;
+    // cout << player2_board[0].size() << endl;
     initializeGraphics();
 	render();
 }
@@ -188,9 +192,13 @@ void Game::render() {
             // getting string from board
             std::string row1 = player1.renderRow(i);
             std::string row2 = player2.renderRow(i);
+            if (row1.size() != GAME_NUM_COL || row2.size() != GAME_NUM_COL) {
+                std::cout << "Error: Render rows have unexpected size.\n";
+                return;
+            }
             for (int j = 0; j < GAME_NUM_COL; ++j) {
                 // logic: only render the board if it is different then previous
-                if (player1_board[j][i] != row1[j] /*&& ((turnAcc % 2 == 0) || turnAcc == 0)*/) {
+                if (player1_board[i][j] != row1[j] /*&& ((turnAcc % 2 == 0) || turnAcc == 0)*/) {
                     // check character for player 1 and display
                     colour1 = CHAR_TO_COLOUR[row1[j]];
                     // if (colour1 != 0) {
@@ -198,9 +206,9 @@ void Game::render() {
                     //     player1_board[j][i] = row1[j];
                     // }
                     window->fillRectangle(j * 20, (i + 4) * 20, 20, 20, colour1);
-                    player1_board[j][i] = row1[j];
+                    player1_board[i][j] = row1[j];
                 }
-                if (player2_board[j][i] != row2[j] /*&& (turnAcc % 2 != 0 || turnAcc == 0)*/) {
+                if (player2_board[i][j] != row2[j] /*&& (turnAcc % 2 != 0 || turnAcc == 0)*/) {
                     // check character for player 2 and display
                     colour2 = CHAR_TO_COLOUR[row2[j]];
                     // if (colour2 != 0) {
@@ -208,7 +216,7 @@ void Game::render() {
                     //     player2_board[j][i] = row2[j];
                     // }
                     window->fillRectangle((j + 21) * 20, (i + 4) * 20, 20, 20, colour2);
-                        player2_board[j][i] = row2[j];
+                        player2_board[i][j] = row2[j];
                 }
             }
         }
@@ -243,10 +251,10 @@ void Game::render() {
     std::cout << "Score:" << setw(7) << setfill(' ') << right << player2.getScore() << std::endl;
 
     // highscore
-    int highscore = max(player1.getHighScore(), player2.getHighScore());
-    gameProps.setProp("highscore", to_string(highscore));
-    std::cout << "Highscore:" << setw(3) << setfill(' ') << right << highscore << "    ";
-    std::cout << "Highscore:" << setw(3) << setfill(' ') << right << highscore << std::endl;
+    gameProps.setProp("highscore1", to_string(player1.getHighScore()));
+    gameProps.setProp("highscore2", to_string(player2.getHighScore()));
+    std::cout << "Highscore:" << setw(3) << setfill(' ') << right << player1.getHighScore() << "    ";
+    std::cout << "Highscore:" << setw(3) << setfill(' ') << right << player2.getHighScore() << std::endl;
 
     // separator
     std::cout << "-----------      -----------" << std::endl;
@@ -288,6 +296,21 @@ void Game::restart() {
     // Reset player's game boards
     player1.resetBoard();
     player2.resetBoard();
+
+    // Reset player1_board and player2_board
+    player1_board.clear();
+    player2_board.clear();
+    for (int i = 0; i < GAME_NUM_ROW; ++i) {
+        // populate a blank row
+        std::vector<char> row1;
+        std::vector<char> row2;
+        for (int j = 0; j < GAME_NUM_COL; ++j) {
+            row1.emplace_back(' ');
+            row2.emplace_back(' ');
+        }
+        player1_board.emplace_back(row1);
+        player2_board.emplace_back(row2);
+    }
 
     if (isGraphics) {
         // clear the graphical board
