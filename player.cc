@@ -22,6 +22,7 @@ Player::~Player() {
     delete lvl;
     delete shape;
     delete nextShape;
+    delete shadowShape;
 }
 
 void Player::setNextLevel() { //tested
@@ -87,6 +88,48 @@ void Player::handleMovement(int moveCol, int moveRow) {
         if(!canMove(down, 0)) dropBlock();
         else shape->move(0, down);
     }
+
+    generateShadow();
+}
+
+void Player::generateShadow() {
+    delete shadowShape;
+    
+    shadowShape = new Shape(*shape);
+    int dropDistance = calculateDropDistance();
+    if (dropDistance > 0) {
+        shadowShape->move(0, dropDistance);
+    }
+}
+
+int Player::calculateDropDistance() {
+    if (!shape) return 0;
+    
+    int distance = 0;
+    Shape tempShape(*shape);
+    
+    while (true) {
+        int nextTop = tempShape.getT() + 1;
+        int left = tempShape.getL();
+        
+        if (nextTop + tempShape.getHeight() > 18) break;
+        
+        bool collision = false;
+        for (int i = 0; i < tempShape.getHeight() && !collision; ++i) {
+            for (int j = 0; j < tempShape.getWidth() && !collision; ++j) {
+                if (tempShape.charAt(j, i) != ' ' && studio.charAt(left + j, nextTop + i) != ' ') {
+                    collision = true;
+                }
+            }
+        }
+        
+        if (collision) break;
+
+        tempShape.move(0, 1);
+        distance++;
+    }
+    
+    return distance;
 }
 
 void Player::updateTurn(string cmd) { // tested
@@ -218,12 +261,15 @@ std::string Player::renderRow(int n) { // tested
             char shapeChar = shape->charAt(i - shape->getL(), n - shape->getT());
             if(shapeChar != ' ') {
                 row_str += shapeChar;
-                // std::cout << shapeChar;
                 continue;
             }
         }
+        else if(shadowShape && n >= shadowShape->getT() && n < shadowShape->getT() + shadowShape->getHeight() && i >= shadowShape->getL() && i < shadowShape->getL() + shadowShape->getWidth()) {
+            char shadowChar = '#';
+            row_str += '#';
+            continue;
+        }
         row_str += studio.charAt(i, n);
-        // std::cout << studio.charAt(i, n);
     }
     return row_str;
 }

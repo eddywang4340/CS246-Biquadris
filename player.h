@@ -13,12 +13,17 @@ class Player {
     Studio studio;
     Shape* shape;
     Shape* nextShape;
+    Shape* shadowShape;
     
     int totalRowsCleared;
     int highScore;
     bool lost, isBlind, isHeavy, isForce, isRand;
 
     void handleMovement(int moveCol, int moveRow);
+    
+    Shape* shadowShape;
+    void generateShadow();
+    int calculateDropDistance();
 
 public:
     Player(int lvl = 0, std::string file = "");
