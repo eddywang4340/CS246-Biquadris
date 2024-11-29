@@ -40,6 +40,7 @@ Player::~Player() {
     delete lvl;
     delete shape;
     delete nextShape;
+    delete shadowShape;
 }
 
 void Player::setNextLevel() { //tested
@@ -116,6 +117,49 @@ void Player::handleMovement(int moveCol, int moveRow) {
         if(!canMove(down, 0)) dropBlock();
         else shape->move(0, down);
     }
+
+    generateShadow();
+}
+
+void Player::generateShadow() {
+    delete shadowShape;
+    
+    shadowShape = new Shape(*shape);
+    cout << shadowShape << endl;
+    int dropDistance = calculateDropDistance();
+    if (dropDistance > 0) {
+        shadowShape->move(0, dropDistance);
+    }
+}
+
+int Player::calculateDropDistance() {
+    if (!shape) return 0;
+    
+    int distance = 0;
+    Shape tempShape(*shape);
+    
+    while (true) {
+        int nextTop = tempShape.getT() + 1;
+        int left = tempShape.getL();
+        
+        if (nextTop + tempShape.getHeight() > 18) break;
+        
+        bool collision = false;
+        for (int i = 0; i < tempShape.getHeight() && !collision; ++i) {
+            for (int j = 0; j < tempShape.getWidth() && !collision; ++j) {
+                if (tempShape.charAt(j, i) != ' ' && studio.charAt(left + j, nextTop + i) != ' ') {
+                    collision = true;
+                }
+            }
+        }
+        
+        if (collision) break;
+
+        tempShape.move(0, 1);
+        distance++;
+    }
+    
+    return distance;
 }
 
 void Player::updateTurn(string cmd) { // tested
@@ -158,8 +202,10 @@ void Player::updateTurn(string cmd) { // tested
 
 	if (cmd == "clockwise") {
 		shape->rotateCW();
+        generateShadow();
 	} else if (cmd == "counterclockwise") {
 		shape->rotateCCW();
+        generateShadow();
 	}
 
     //Movement commands
@@ -215,6 +261,8 @@ void Player::dropBlock() { // tested
     studio.setBoard(board);
     
 	delete shape;
+    delete shadowShape;
+    shadowShape = nullptr;
 	shape = nextShape;
 	char c;
 	if ((lvl->getLevel() == 0 || !(isRand)) && file.is_open() && file.get(c)) {
@@ -280,12 +328,17 @@ std::string Player::renderRow(int n) { // tested
             char shapeChar = shape->charAt(i - shape->getL(), n - shape->getT());
             if(shapeChar != ' ') {
                 row_str += shapeChar;
-                // std::cout << shapeChar;
+                continue;
+            }
+        }
+        else if((shadowShape != nullptr) && (n >= shadowShape->getT()) && (n < shadowShape->getT() + shadowShape->getHeight()) && (i >= shadowShape->getL()) && (i < shadowShape->getL() + shadowShape->getWidth())) {
+            char shapeChar = shadowShape->charAt(i - shadowShape->getL(), n - shadowShape->getT());
+            if(shapeChar != ' ') {
+                row_str += '#';
                 continue;
             }
         }
         row_str += studio.charAt(i, n);
-        // std::cout << studio.charAt(i, n);
     }
     return row_str;
 }
@@ -308,6 +361,8 @@ std::string Player::renderRowShape(int n) const { // tested
 void Player::setShape(char c) {
 	if (shape) {
 		delete shape; 
+    delete shadowShape;
+    shadowShape = nullptr;
 	}
 	
 	switch(c) {

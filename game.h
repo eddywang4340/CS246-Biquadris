@@ -5,17 +5,18 @@
 #include "player.h"
 #include "xwindow.h"
 #include "shape.h"
-// #include "gameproperties.h"
+#include "gameProperties.h"
 
 class Game {
     // private members
     Player player1, player2;
     std::vector<std::vector<char>> player1_board;
     std::vector<std::vector<char>> player2_board;
-    // GameProperties &GP;
     int turnAcc;
     Xwindow *window;
     bool isGraphics;
+
+    GameProperties gameProps;
 
     // public members
     public:

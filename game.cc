@@ -6,7 +6,7 @@
 #include <iomanip>
 
 Game::Game(int player1_lvl, int player2_lvl, std::string player1_file, std::string player2_file, bool isGraphics):
-    player1{player1_lvl}, player2{player2_lvl}, turnAcc{0}, isGraphics{isGraphics}
+    player1{player1_lvl, player2_file}, player2{player2_lvl, player2_file}, turnAcc{0}, isGraphics{isGraphics}, gameProps{"gameProps.txt"}
 { 
     for (int i = 0; i < GAME_NUM_ROW; ++i) {
         // populate a blank row
@@ -47,6 +47,11 @@ void Game::update() {
     while (true) {
         std::string command;
         std::cin >> command;
+
+        if(gameProps.getProp(command) != "") {
+            command = gameProps.getProp(command);
+        }
+
         if (std::cin.eof() || command == "restart") {
             // reached end of file or restart, end the game
             std::string winner = getWinner();
@@ -173,19 +178,21 @@ void Game::render() {
             std::string row2 = player2.renderRow(i);
             for (int j = 0; j < GAME_NUM_COL; ++j) {
                 // logic: only render the board if it is different then previous
-                if (player1_board[j][i] != row1[j]) {
+                if (player1_board[j][i] != row1[j] && ((turnAcc & 2 == 0) || turnAcc == 0)) {
                     // check character for player 1 and display
                     colour1 = CHAR_TO_COLOUR[row1[j]];
-                    // window->getPixelColour(j * 20, (i + 3) * 20);
-                    window->fillRectangle(j * 20, (i + 3) * 20, 20, 20, colour1);
-                    player1_board[j][i] = row1[j];
+                    if (colour1 != 0 || (colour1 == 0 && player1_board[j][i] != 0)) {
+                        window->fillRectangle(j * 20, (i + 3) * 20, 20, 20, colour1);
+                        player1_board[j][i] = row1[j];
+                    }
                 }
-                if (player2_board[j][i] != row2[j]) {
+                if (player2_board[j][i] != row2[j] && (turnAcc % 2 != 0 || turnAcc == 0)) {
                     // check character for player 2 and display
                     colour2 = CHAR_TO_COLOUR[row2[j]];
-                    window->fillRectangle((j + 21) * 20, (i + 3) * 20, 20, 20, colour2);
-                    // window->getPixelColour(j * 20, (i + 3) * 20);
-                    player2_board[j][i] = row2[j];
+                    if (colour2 != 0 || (colour2 == 0 && player2_board[j][i] != 0)) {
+                        window->fillRectangle((j + 21) * 20, (i + 3) * 20, 20, 20, colour2);
+                        player2_board[j][i] = row2[j];
+                    }
                 }
             }
         }
@@ -218,6 +225,12 @@ void Game::render() {
     // each player's score
     std::cout << "Score:" << setw(5) << setfill(' ') << right << player1.getScore() << "     ";
     std::cout << "Score:" << setw(5) << setfill(' ') << right << player2.getScore() << std::endl;
+
+    // highscore
+    int highscore = max(player1.getHighScore(), player2.getHighScore());
+    gameProps.setProp("highscore", to_string(highscore));
+    std::cout << "Highscore:" << setw(5) << setfill(' ') << right << highscore << " ";
+    std::cout << "Highscore:" << setw(5) << setfill(' ') << right << highscore << std::endl;
 
     // separator
     std::cout << "-----------     -----------" << std::endl;

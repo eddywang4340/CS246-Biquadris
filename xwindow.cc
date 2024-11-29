@@ -30,10 +30,10 @@ Xwindow::Xwindow(int width, int height) : width{width}, height{height} {
     // Set up colours.
     XColor xcolour;
     Colormap cmap;
-    char color_vals[9][10]={"white", "black", "red", "green", "blue", "orange", "yellow", "purple", "brown"};
+    char color_vals[11][15]={"white", "black", "red", "green", "blue", "orange", "yellow", "purple", "brown", "grey", "blueviolet"};
 
     cmap=DefaultColormap(d,DefaultScreen(d));
-    for(int i=0; i < 9; ++i) {
+    for(int i=0; i < 11; ++i) {
         XParseColor(d,cmap,color_vals[i],&xcolour);
         XAllocColor(d,cmap,&xcolour);
         colours[i]=xcolour.pixel;
@@ -69,15 +69,5 @@ void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
 
 void Xwindow::drawString(int x, int y, string msg) {
     XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
-}
-
-void Xwindow::getPixelColour(int x, int y) {
-    XColor c;
-    XImage *image;
-    image = XGetImage (d, XRootWindow (d, XDefaultScreen (d)), x, y, 1, 1, AllPlanes, XYPixmap);
-    c.pixel = XGetPixel (image, 0, 0);
-    XFree (image);
-    XQueryColor (d, XDefaultColormap(d, XDefaultScreen (d)), &c);
-    cout << c.red << " " << c.green << " " << c.blue << "\n";
 }
 

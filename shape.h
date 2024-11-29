@@ -12,6 +12,7 @@ class Shape {
 
 	public:
 		Shape(int i_width, int i_height, char c);
+		~Shape() = default;
 		void createEmptyShape();
 		void createShape(vector<vector<char>> newShape);
 		void addShape();

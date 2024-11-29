@@ -13,6 +13,7 @@ class Player {
     Studio studio;
     Shape* shape;
     Shape* nextShape;
+    Shape* shadowShape;
 	ifstream file;
     
     int totalRowsCleared;
@@ -20,6 +21,9 @@ class Player {
     bool lost, isBlind, isHeavy, isForce, isRand;
 
     void handleMovement(int moveCol, int moveRow);
+    
+    void generateShadow();
+    int calculateDropDistance();
 
 public:
     Player(int lvl = 0);
