@@ -38,8 +38,8 @@ down down
 dr drop
 dro drop
 drop drop
-highscore1 9
-highscore2 9
+highscore1 0
+highscore2 0
 i I
 j J
 l left
