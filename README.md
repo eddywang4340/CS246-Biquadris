@@ -2,8 +2,6 @@
 
 Biquadris is a two-player competitive Tetris-inspired game developed as a final project for CS 246. The game emphasizes object-oriented design principles and demonstrates concepts such as polymorphism, inheritance, and design patterns.
 
-![Biquadris Game](https://via.placeholder.com/750x450?text=Biquadris+Game+Screenshot)
-
 ## Table of Contents
 - [Overview](#overview)
 - [Features](#features)
@@ -82,7 +80,7 @@ The design document includes:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/biquadris.git
+git clone [https://github.com/eddywang4340/CS246-Biquadris.git]
 cd biquadris
 
 # Compile the project
