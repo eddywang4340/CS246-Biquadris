@@ -80,7 +80,7 @@ The design document includes:
 
 ```bash
 # Clone the repository
-git clone [https://github.com/eddywang4340/CS246-Biquadris.git]
+git clone https://github.com/eddywang4340/CS246-Biquadris.git
 cd biquadris
 
 # Compile the project
